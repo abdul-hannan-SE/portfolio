@@ -26,7 +26,7 @@ const portfolioData = {
 
   stats: [
     { number: 1, suffix: "+", label: "Years Experience", icon: "fa-briefcase" },
-    { number: 3, suffix: "+", label: "Projects Built", icon: "fa-code" },
+    { number: 4, suffix: "+", label: "Projects Built", icon: "fa-code" },
     { number: 2, suffix: "", label: "Companies Worked", icon: "fa-building" },
   ],
 

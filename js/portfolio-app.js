@@ -446,6 +446,30 @@
       });
     }
 
+    function renderProjectGalleryHtml(pj) {
+      const items = pj.gallery;
+      if (!Array.isArray(items) || !items.length) return "";
+      const cells = items
+        .map((g) => {
+          const src = typeof g === "string" ? g : g.src;
+          const caption = typeof g === "string" ? "" : g.caption || "";
+          const alt = caption || pj.imageAlt || pj.title;
+          return `<figure class="overflow-hidden rounded-xl neon-border bg-slate-900/40">
+            <img src="${escapeHTML(src)}" alt="${escapeHTML(alt)}" class="w-full max-h-[280px] object-cover object-top" loading="lazy" draggable="false" />
+            ${
+              caption
+                ? `<figcaption class="border-t border-white/10 px-3 py-2 text-[12px] leading-snug text-slate-400">${escapeHTML(caption)}</figcaption>`
+                : ""
+            }
+          </figure>`;
+        })
+        .join("");
+      return `<div class="mt-8">
+        <h4 class="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-neon-purple/90">Screenshots</h4>
+        <div class="grid max-h-[min(62vh,720px)] gap-4 overflow-y-auto pr-1 sm:grid-cols-2">${cells}</div>
+      </div>`;
+    }
+
     function openProjectModal(id) {
       const pj = projectById(id);
       const backdrop = document.getElementById("projectModalBackdrop");
@@ -472,6 +496,7 @@
               .join("")}
           </ul>
         </div>
+        ${renderProjectGalleryHtml(pj)}
         <div class="flex flex-wrap gap-2">
           ${pj.technologies
             .map((t) => `<span class="rounded-xl border border-white/12 px-[14px] py-[6px] text-[13px] text-slate-200">${escapeHTML(t)}</span>`)
