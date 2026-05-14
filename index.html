@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  PRODUCTION PORTFOLIO TEMPLATE — HTML + Tailwind CDN + Vanilla JS + Alpine.js
+  ═══════════════════════════════════════════════════════════════════════════
+  CUSTOMIZE COLORS (search/replace Tailwind arbitrary values or extend below):
+    • Electric purple — #a855f7 (accent-purple)
+    • Cyan — #06b6d4
+    • Pink — #ec4899
+    • Lime — #84cc16
+    • Background — #030712 ↔ #000
+
+  CONTACT FORM: Opens the visitor’s mail app via mailto (no keys, no third-party inbox API).
+               Set recipient in portfolioData.personal.email — keep messages concise (URL length limits).
+
+  ADD CONTENT: Edit js/portfolio-data.js (site copy, projects, skills, experience).
+  ═══════════════════════════════════════════════════════════════════════════
+-->
+<html lang="en" class="scroll-smooth dark" x-data="app()" x-init="initApp()" xmlns:x-transition="ignored">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Abdul Hannan — Backend Developer. Node.js, Laravel, REST APIs. Open for freelance worldwide." />
+  <title>Abdul Hannan | Backend Developer · Portfolio Template</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Poppins:wght@400..800&display=swap" rel="stylesheet" />
+
+  <!-- CDN styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ["Poppins", "Inter", "system-ui", "sans-serif"],
+            sans: ["Inter", "system-ui", "sans-serif"],
+          },
+          colors: {
+            abyss: { DEFAULT: "#030712", light: "#0f172a" },
+            neon: {
+              purple: "#a855f7",
+              cyan: "#06b6d4",
+              pink: "#ec4899",
+              lime: "#84cc16",
+            },
+          },
+          boxShadow: {
+            neon: "0 0 36px rgba(168,85,247,0.35), 0 0 60px rgba(6,182,212,0.12)",
+          },
+          backgroundImage: {
+            grid: "linear-gradient(rgba(168,85,247,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(6,182,212,0.06) 1px,transparent 1px)",
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="css/portfolio-theme.css" />
+
+  <!-- Vendor libraries (defer: parse order). Alpine.js MUST load last so Swiper/Typed/etc. exist before x-init. -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" referrerpolicy="no-referrer"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" referrerpolicy="no-referrer"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" referrerpolicy="no-referrer"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.8.0/countUp.umd.js" referrerpolicy="no-referrer"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js" referrerpolicy="no-referrer"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/lib/typed.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body class="font-sans text-slate-100 bg-[#030712] bg-grid bg-[length:40px_40px] noise relative overflow-x-hidden selection:bg-[#ec4899]/25 selection:text-white">
+  <script src="js/portfolio-data.js"></script>
+
+  <!-- Glow cursor -->
+  <div id="cursor-dot" aria-hidden="true" class="hidden md:block pointer-events-none fixed z-[10001] mix-blend-difference w-2 h-2 rounded-full bg-neon-cyan -translate-x-1/2 -translate-y-1/2 will-change-transform"></div>
+  <div id="cursor-ring" aria-hidden="true" class="hidden md:block pointer-events-none fixed z-[10000] w-11 h-11 rounded-full border border-neon-purple/40 -translate-x-1/2 -translate-y-1/2 will-change-transform backdrop-blur-[2px]"></div>
+
+  <!-- Scroll progress -->
+  <div id="scrollProgressWrap" class="fixed top-0 left-0 right-0 z-[9999] h-1 md:h-1.5 bg-black/60 dark:bg-black/70 border-b border-white/5 backdrop-blur-lg">
+    <div id="scrollProgress" class="h-full w-0 bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan shadow-[0_0_26px_rgba(168,85,247,0.55)] origin-left transition-[width] duration-100 ease-linear"></div>
+  </div>
+
+  <main class="relative z-10 min-h-screen bg-slate-body">
+    <!-- Nav -->
+    <header
+      id="siteNav"
+      x-data="{ open:false }"
+      @keydown.escape.window="open=false"
+      class="fixed top-2 inset-x-0 z-[9100] px-4 sm:px-6 transition-transform duration-500 md:duration-700 will-change-transform"
+      data-nav-root
+      style="-webkit-backface-visibility: hidden; backface-visibility: hidden;"
+    >
+      <nav id="glassNavBar" class="glass-strong neon-border mx-auto max-w-6xl rounded-2xl px-4 sm:px-6 py-3 flex flex-wrap lg:flex-nowrap items-center justify-between gap-3 shadow-xl shadow-purple-950/30">
+        <a href="#home" id="brandLink" data-smooth-scroll class="flex items-center gap-3 group">
+          <span class="relative flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-neon-purple via-fuchsia-500 to-neon-cyan text-xl font-display font-black text-white tracking-tighter shadow-[0_0_24px_rgba(168,85,247,0.45)] group-hover:scale-105 transition-transform">
+            AH
+            <span class="pointer-events-none absolute inset-px rounded-[11px] border border-white/15"></span>
+          </span>
+          <span class="hidden xs:block">
+            <span id="navBrandName" class="font-display font-semibold text-lg tracking-tight text-white dark:text-white block leading-tight">Loading…</span>
+            <span id="navBrandTitle" class="text-[11px] tracking-[0.2em] uppercase text-[#64748b] dark:text-[#8090aa]">…</span>
+          </span>
+        </a>
+
+        <!-- Desktop -->
+        <ul class="hidden lg:flex gap-10 text-[13px] font-medium text-slate-300 items-center tracking-wide">
+          <li><a href="#home" class="nav-link relative py-1" data-section="home" data-smooth-scroll>Home</a></li>
+          <li><a href="#about" class="nav-link relative py-1" data-section="about" data-smooth-scroll>About</a></li>
+          <li><a href="#projects" class="nav-link relative py-1" data-section="projects" data-smooth-scroll>Projects</a></li>
+          <li><a href="#skills" class="nav-link relative py-1" data-section="skills" data-smooth-scroll>Skills</a></li>
+          <li><a href="#experience" class="nav-link relative py-1" data-section="experience" data-smooth-scroll>Experience</a></li>
+          <li><a href="#contact" class="nav-link relative py-1" data-section="contact" data-smooth-scroll>Contact</a></li>
+        </ul>
+
+        <div class="flex items-center gap-2 md:gap-3">
+          <button
+            type="button"
+            id="themeToggle"
+            aria-label="Toggle light and dark theme"
+            class="relative h-10 w-10 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 flex items-center justify-center transition text-slate-200"
+          >
+            <i id="themeIconSun" class="fa-solid fa-sun absolute text-xl opacity-0 scale-75 transition-all"></i>
+            <i id="themeIconMoon" class="fa-solid fa-moon absolute text-xl transition-all"></i>
+          </button>
+          <a
+            href="#contact"
+            data-smooth-scroll
+            class="hidden sm:inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-neon-purple via-fuchsia-500 to-neon-cyan text-[13px] font-semibold text-white shadow-[0_0_32px_rgba(168,85,247,0.35)] hover:brightness-[1.08]"
+          >
+            Let's Talk
+          </a>
+
+          <!-- Mobile burger -->
+          <button
+            type="button"
+            class="lg:hidden inline-flex flex-col gap-1.5 p-2 rounded-lg border border-white/10 hover:bg-white/5"
+            @click="open = !open"
+            :aria-expanded="open.toString()"
+            aria-label="Menu"
+          >
+            <span class="w-6 h-[2px] bg-white transition" :class="open ? 'rotate-45 translate-y-2.5' : ''"></span>
+            <span class="w-6 h-[2px] bg-white transition" :class="open ? 'opacity-0 scale-95' : ''"></span>
+            <span class="w-6 h-[2px] bg-white transition" :class="open ? '-rotate-45 -translate-y-2.5' : ''"></span>
+          </button>
+        </div>
+
+        <!-- Mobile panel -->
+        <div
+          x-show="open"
+          x-transition.duration.300ms
+          x-cloak
+          class="lg:hidden mt-4 w-full border-t border-white/10 pt-4 flex flex-col gap-2 text-[15px] font-medium pb-4"
+          @click.outside="open = false"
+        >
+          <a href="#home" class="mobile-nav px-4 py-2 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4" data-smooth-scroll @click="open=false"><span data-section="home" class="">Home</span> <i class="fa-solid fa-chevron-right opacity-35 text-xs"></i></a>
+          <a href="#about" class="mobile-nav px-4 py-2 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4" data-smooth-scroll @click="open=false"><span data-section="about" class="">About</span></a>
+          <a href="#projects" class="mobile-nav px-4 py-2 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4" data-smooth-scroll @click="open=false"><span data-section="projects">Projects</span></a>
+          <a href="#skills" class="mobile-nav px-4 py-2 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4" data-smooth-scroll @click="open=false"><span data-section="skills">Skills</span></a>
+          <a href="#experience" class="mobile-nav px-4 py-2 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4" data-smooth-scroll @click="open=false"><span data-section="experience">Experience</span></a>
+          <a href="#contact" class="mobile-nav px-4 py-2 rounded-xl bg-gradient-to-r from-neon-purple/30 to-neon-cyan/20 border border-neon-purple/35 text-white flex justify-center font-semibold" data-smooth-scroll @click="open=false"><span data-section="contact">Contact</span></a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Sidebar social (Hero) -->
+    <aside id="heroSocialRail" aria-label="Social links" data-aos="fade-right" data-aos-duration="850" data-aos-delay="200" data-aos-once="true" class="hidden xl:flex absolute left-[max(24px,(100vw-1200px)/2-112px)] top-[calc(50vh)] -translate-y-1/2 z-[50] flex-col gap-4 items-center">
+      <!-- Injected -->
+    </aside>
+
+    <!-- HERO -->
+    <section id="home" data-section-marker="home" class="relative min-h-screen flex items-center justify-center px-6 overflow-hidden pt-36 pb-20 md:pb-28">
+      <div class="absolute inset-0 pointer-events-none -z-[1] particle-line bg-[linear-gradient(rgba(15,23,42,0.65),transparent)]"></div>
+      <div class="particles-bg absolute inset-0 -z-[1] opacity-95">
+        <div id="particles-js" aria-hidden="true"></div>
+      </div>
+
+      <!-- Floating blobs -->
+      <div class="floating-blob pointer-events-none absolute -top-[10vmax] left-[-14vmax] w-[clamp(340px,40vw,480px)] h-[clamp(340px,40vw,480px)] rounded-full bg-gradient-to-tr from-[#a855f7]/45 via-transparent to-transparent blur-[100px]" style="animation: gradient-wave 28s infinite linear alternate-reverse;"></div>
+      <div class="floating-blob pointer-events-none absolute bottom-[-20vmax] right-[-10vmax] w-[clamp(300px,45vw,520px)] h-[clamp(280px,40vw,500px)] rounded-full bg-gradient-to-tl from-[#06b6d4]/25 via-transparent to-[#ec4899]/35 blur-[120px]" style="animation: gradient-wave 32s infinite linear;"></div>
+      <div class="floating-blob particle-dot pointer-events-none absolute top-[52%] right-[33%] w-72 h-72 rounded-full opacity-40 blur-3xl bg-neon-lime/12"></div>
+
+      <div class="relative mx-auto flex max-w-5xl flex-col items-center lg:items-start text-center lg:text-left gap-y-11">
+        <div class="space-y-4 max-w-xl lg:max-w-2xl" data-aos="fade-down" data-aos-duration="800" data-aos-once="true">
+          <p id="heroKicker" class="inline-flex items-center px-5 py-1.5 rounded-full border border-white/15 glass text-[13px] font-medium tracking-[0.18em] uppercase text-[#aab6d4] neon-border">
+            <span id="blinkDot" class="mr-3 flex h-[7px] w-[7px] rounded-full bg-gradient-to-br from-emerald-400 to-neon-lime animate-pulse"></span>
+            <span id="hiLabelSpan">Hi, I'm</span>
+          </p>
+          <h1 id="heroTitle" class="font-display tracking-tighter text-[clamp(2.6rem,5vw,4.05rem)] font-extrabold leading-none">
+            <span class="text-slate-200 dark:text-[#eaf0ff]" id="heroName"></span><br />
+            <span id="typedWrap" class="bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent animate-gradient-shift">
+              <span id="typedOutput" class="underline decoration-transparent"></span><span></span><span aria-hidden class="animate-pulse">|</span>
+            </span>
+          </h1>
+          <p id="heroBio" class="text-base md:text-[17px] leading-relaxed text-slate-300 max-w-xl md:max-w-xl mx-auto lg:mx-0 lg:max-w-xl"></p>
+          <div class="flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-4 pt-2">
+            <a href="#projects" data-smooth-scroll class="w-full max-w-[280px] sm:w-auto sm:max-w-none flex items-center justify-center gap-2 px-10 py-[14px] rounded-full bg-white text-black font-semibold shadow-[0_0_42px_rgba(255,255,255,0.18)] hover:-translate-y-0.5 transition">
+              View My Work
+              <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
+            <a href="#contact" data-smooth-scroll class="glass w-full max-w-[280px] sm:w-auto sm:max-w-none neon-border px-10 py-[14px] rounded-full flex items-center justify-center gap-3 font-semibold text-white hover:bg-white/[0.04] transition hover:-translate-y-0.5">
+              <span>Let's Talk</span>
+              <i class="fa-solid fa-comments text-neon-cyan"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile social inline -->
+        <div id="heroSocialInline" data-aos="fade-up" class="xl:hidden flex flex-row flex-wrap gap-6 justify-center -mt-6"></div>
+      </div>
+
+      <div aria-hidden data-aos="fade-up" data-aos-delay="200" data-aos-once="true" data-aos-offset="-10" data-aos-duration="990" data-aos-once-duration="990" data-aos-once-offset="-10"
+        data-aos-once-placement="fade-up-delayed"
+        class="absolute inset-x-0 bottom-12 flex justify-center animate-bounce-slow mt-28">
+        <a href="#about" aria-label="Scroll to about section" id="heroScrollCue" data-smooth-scroll class="glass px-10 py-[10px] rounded-full neon-border shadow-neon hover:shadow-xl flex flex-col items-center gap-1 text-[11px] tracking-[0.28em] font-semibold text-slate-300">
+          Scroll
+          <i class="fa-solid fa-angle-down animate-bounce mt-px text-neon-purple"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" data-section-marker="about" class="relative py-[110px] md:py-32 px-4 sm:px-8">
+      <div class="max-w-6xl mx-auto grid lg:grid-cols-[1fr,1fr] gap-14 lg:gap-20 items-start">
+        <div data-aos="fade-right" data-aos-once="true" class="space-y-10">
+          <div>
+            <h2 id="aboutHeadingEl" class="font-display tracking-tighter text-[34px] sm:text-[40px] font-bold mb-3">
+              <span class="text-slate-200">About&nbsp;</span>
+              <span class="gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent">Me</span>
+            </h2>
+            <p id="aboutBio" class="text-slate-300 leading-relaxed text-[15px] md:text-base"></p>
+          </div>
+          <div class="glass neon-border px-8 py-[18px] inline-flex rounded-2xl items-center gap-3 text-sm font-semibold text-neon-lime border border-emerald-400/20 bg-emerald-400/10">
+            <span class="h-9 w-9 rounded-xl bg-black/35 flex items-center justify-center shadow-inner">
+              <i class="fa-regular fa-clock text-neon-lime animate-pulse"></i>
+            </span>
+            <span>Available for Freelance Opportunities</span>
+          </div>
+        </div>
+        <div class="flex flex-col gap-8" data-aos="fade-left" data-aos-once="true">
+          <div id="statsCards" class="grid sm:grid-cols-3 gap-6"></div>
+          <div>
+            <h3 class="text-lg font-semibold mb-6 text-slate-200 flex items-center gap-3">
+              <span class="h-px flex-1 bg-gradient-to-r from-transparent via-neon-purple/65 to-transparent"></span>
+              <span id="skillsPreviewTitle">Technical Skills</span>
+              <span class="h-px flex-1 bg-gradient-to-r from-transparent via-neon-purple/65 to-transparent"></span>
+            </h3>
+            <div id="aboutSkillBars"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" data-section-marker="projects" class="py-[110px] md:py-32 px-2 sm:px-6 lg:px-10 relative overflow-hidden">
+      <div aria-hidden class="particle-line absolute inset-x-10 top-[30%] h-px bg-white/10 -z-[1]" style="opacity:0.43"></div>
+      <header class="text-center mb-16 max-w-3xl mx-auto px-6" data-aos="fade-up" data-aos-once="true">
+        <h2 id="featuredProjectsHeading" class="font-display tracking-tighter text-[32px] sm:text-[40px] mb-6 font-semibold gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent pb-px">
+          Featured Projects
+        </h2>
+        <p id="projectsIntro" class="text-slate-400 text-[15px] leading-relaxed">Selected builds — backends, dashboards, integrations, logistics automation — populated entirely from your <code class="text-neon-purple/95 text-[13px]">portfolioData.projects</code> array.</p>
+      </header>
+      <div class="max-w-[1280px] mx-auto swiper project-swiper relative px-8 py-12">
+        <div class="swiper-wrapper pb-14" id="projectSwipeWrapper"></div>
+        <div class="swiper-pagination !bottom-[3px]" style="--swiper-pagination-color:#a855f7"></div>
+        <div class="swiper-button-prev !hidden md:!flex !text-[#cfd7ff]" style="opacity: .45"></div>
+        <div class="swiper-button-next !hidden md:!flex !text-[#cfd7ff]" style="opacity:.45;"></div>
+      </div>
+
+      <!-- Project modal -->
+      <div id="projectModalBackdrop" tabindex="-1" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[10050] opacity-0 pointer-events-none transition-opacity duration-300 flex justify-center md:justify-end items-start md:items-center p-0 md:p-6">
+        <div id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitleRef" tabindex="-1" class="outline-none neon-border rounded-none md:rounded-3xl max-w-xl w-[100vw] lg:max-w-3xl h-full md:h-auto overflow-y-auto max-h-none md:max-h-[calc(92vh)] glass-strong relative transition-all duration-350 scale-[0.965] opacity-95 translate-x-24 shadow-[0_0_80px_#a855f755]">
+          <button type="button" id="modalCloseBtn" class="sticky top-0 z-[1] mb-[-36px] float-right mr-7 mt-[18px] w-11 h-11 rounded-full neon-border hover:bg-black/55 flex justify-center items-center text-white backdrop-blur">
+            <i class="fa-solid fa-times text-xl"></i>
+          </button>
+          <div id="modalContent" class="p-8 md:p-10 pt-[68px] space-y-6"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" data-section-marker="skills" class="relative py-[110px] px-6 md:px-14">
+      <div class="max-w-7xl mx-auto">
+        <h2 id="skillsHeading" data-aos="fade-up" class="gradient-text-heading text-center mb-14 font-display text-[clamp(31px,4vw,40px)] font-bold bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent pb-px">
+          Tech Stack
+        </h2>
+
+        <!-- Skill tabs wired by JS -->
+        <div id="skillTabsWrap" data-aos="fade-up" class="glass neon-border px-7 py-[18px] flex flex-wrap justify-center gap-[10px] mb-14 max-w-fit mx-auto rounded-full"></div>
+
+        <div id="skillCardsGrid" class="grid xs:grid-cols-2 md:grid-cols-4 gap-10"></div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" data-section-marker="experience" class="relative py-[110px] md:py-34 px-4 sm:px-8">
+      <div class="max-w-6xl mx-auto">
+        <h2 data-aos="fade-up" class="gradient-text-heading text-center mb-[78px] font-display text-[33px] sm:text-[41px] font-bold bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent">
+          Professional Journey
+        </h2>
+
+        <!-- Timeline gradient line wrapper -->
+        <div class="relative pl-14 sm:pl-20">
+          <!-- Mobile line -->
+          <div class="absolute left-[18px] sm:left-[42px] top-0 bottom-0 w-[2px] timeline-glow particle-line rounded-full opacity-95"></div>
+
+          <!-- Experiences injected -->
+          <div id="timelineRoot" class="space-y-[58px] sm:space-y-[68px]"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" data-section-marker="contact" class="relative py-[110px] md:pb-44 px-4 sm:px-8">
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-[0.93fr_1.16fr] gap-16 xl:gap-[78px]">
+        <div class="relative z-[1]" data-aos="fade-right">
+          <div class="particle-line absolute inset-0 bg-gradient-to-t from-purple-950/65 to-transparent blur-3xl rounded-3xl -z-[5] opacity-95"></div>
+          <header class="mb-14">
+            <h2 class="font-display text-[32px] sm:text-[43px] font-bold leading-tighter tracking-tighter text-white pb-px">
+              Let's Build Something&nbsp;
+              <span class="gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent">Amazing</span>
+            </h2>
+            <p class="mt-8 text-[16px] text-slate-300 max-w-xl">Open to freelance projects worldwide — backends, dashboards, integrations, modernization, infra, mentorship, fractional engineering.</p>
+          </header>
+          <div id="contactCards" class="grid gap-[18px]"></div>
+        </div>
+
+        <div id="contactFormOuter" data-aos="fade-left">
+          <!-- Form -->
+          <form id="contactForm" class="glass-strong neon-border p-8 md:p-[44px_48px_40px] rounded-3xl space-y-[22px]" novalidate>
+            <label class="block text-[13px] font-semibold uppercase tracking-[0.19em] text-slate-300 font-display">Hey, what's your name? <span id="lblNameAst" style="opacity:.92" class="text-neon-lime animate-pulse">*</span></label>
+            <input name="from_name" type="text" id="fldName" class="rounded-2xl w-full particle-line bg-transparent border px-7 py-[14px] border-white/[0.095] neon-border hover:border-[#fff3] focus-visible:outline-none ring-2 focus-visible:ring-neon-purple placeholder:text-[#aab5d9]/80" maxlength="140" autocomplete="given-name" required placeholder="Ada Lovelace" />
+
+            <label class="block text-[13px] font-semibold uppercase tracking-[0.19em] text-slate-300 font-display">What's your Email? <span class="text-neon-lime animate-pulse" aria-hidden="true">*</span></label>
+            <input name="reply_to" type="email" id="fldMail" maxlength="254" autocomplete="email" placeholder="your@company.com"
+              pattern="[^\s]+@[^\s]+\.[^\s]+"
+              class="rounded-2xl particle-line bg-transparent px-7 py-[14px] neon-border hover:border-[#ffffff22] ring-2 focus-visible:outline-none ring-neon-purple/10 focus-visible:border-neon-purple/60 border-[#ffffff07] placeholder:text-[#aab5db]/80 border w-full" required />
+
+            <label class="block text-[13px] font-semibold uppercase tracking-[0.19em] text-slate-300 font-display">Project Type?</label>
+            <select id="fldType" required name="project_type" title="Pick a project scope" class="rounded-2xl bg-[#081021dd] neon-border particle-line border-[#272e4499] hover:border-[#ffffff13] px-7 py-3 outline-none appearance-none tracking-wide text-white text-[13px]" style="-webkit-appearance: none; appearance: none;">
+              <option value="" disabled selected hidden class="opacity-60">Pick an option...</option>
+              <option>New Project</option>
+              <option>Ongoing Collaboration</option>
+              <option>Maintenance / SLA</option>
+              <option>Consulting Hourly</option>
+              <option>Other...</option>
+            </select>
+
+            <label class="block text-[13px] md:text-[13px] font-semibold uppercase tracking-[0.189em] text-slate-300 font-display mb-[-6px]" for="fldMsg">
+              Brief about your&nbsp;
+              <span class="underline decoration-transparent font-black text-neon-cyan">ideas</span>?
+            </label>
+            <textarea id="fldMsg" maxlength="5400" name="message" rows="8" spellcheck="false" autocomplete="off" required placeholder="How can we help? Deadlines & budget help me respond faster :-)" 
+              class="rounded-3xl neon-border resize-y min-h-[150px] w-full particle-line hover:border-[#ffffff15] px-9 py-[19px] focus-visible:border-neon-cyan backdrop-blur border-[1.4px] border-[#29324499] outline-none ring-[1.65px] focus-visible:ring-neon-purple/95 bg-transparent leading-relaxed md:leading-snug md:text-[17px]"
+            ></textarea>
+            <!-- Status -->
+            <p id="formStatus" aria-live="polite" class="text-[13.5px] text-center pb-[-4px]" style="opacity: .95"></p>
+            <!-- Submit -->
+            <button id="senderBtn" type="submit" aria-busy="false" class="w-full neon-border particle-line py-[15px] font-display font-semibold uppercase tracking-[0.24em] text-[14px] relative overflow-hidden rounded-2xl mt-10 bg-[linear-gradient(110deg,#a855f7_0%,#ec4899_50%,#06b6d4_109%)] text-white hover:brightness-110 hover:shadow-neon hover:-translate-y-0.7 transition-[transform,brightness,opacity] outline-none outline-offset-[-2px]" style="outline-color:transparent">
+              <span class="ripple-btn relative z-[2] tracking-[1.07px] uppercase">Open in mail app</span>
+              <svg class="ripple-bg absolute inset-0 z-[4] blur-md opacity-[0]" width="260" height="100"><defs /><rect width="260" fill="transparent" /></svg>
+              <span aria-hidden style="opacity:0" id="rippleLoading" class="absolute inset-[0]"></span>
+            </button>
+
+            <!-- Privacy: mailto draft (see portfolioData.personal.email + ejHelp) -->
+            <p id="ejHelp" style="opacity:0.71" class="text-[13px] text-center px-10 text-slate-400"></p>
+
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-24 border-t border-white/10 backdrop-blur glass relative">
+      <div class="flex flex-wrap justify-base justify-between px-16 items-center mx-auto gap-10 max-w-6xl">
+        <span class="font-display tracking-tighter text-xl font-semibold gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent uppercase">AH Portfolio</span>
+        <nav id="footerSocialWrap" aria-label="Social" class="flex gap-[18px]" style="-webkit-mask-image:unset; mask-image:unset"></nav>
+      </div>
+      <span class="text-center px-14 block pb-13 text-[14px] text-slate-500 pt-17">
+        <span id="footerBuiltCopy">Built &amp; designed by Abdul Hannan</span>
+      </span>
+      <small class="text-center block pb-22 text-[12px] text-slate-500">
+        © <span id="footerYear"></span> — All Rights Reserved.<br />
+        Portfolio · Template-ready · JS-configured
+      </small>
+    </footer>
+    <div class="h-24"></div>
+  </main>
+
+  <!-- ─────── Main template JS (RENDER + INTERACTIONS) ─────── -->
+  <template id="__hide"></template>
+  <template id="__blank"></template>
+  <textarea id="__devnull" tabindex="-1" style="opacity: 0;width: 0;height: 0;display: none;"></textarea>
+
+  <script src="js/portfolio-app.js"></script>
+</body>
+</html>
