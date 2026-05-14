@@ -52,7 +52,7 @@ window.PORTFOLIO_DATA = {
         github: 'https://github.com/abdul-hannan-SE/Carrier-Trips-Management-System',
         live: 'https://nafaymotors-accounts-pkuc.vercel.app',
       },
-      image: '',
+      image: 'assets/carrier-trips/01-dashboard.png',
       imageHint: 'carrier-trips.png',
     },
     {
@@ -64,9 +64,9 @@ window.PORTFOLIO_DATA = {
       tech: ['Node.js', 'Express.js', 'MongoDB', 'AWS'],
       links: {
         github: 'https://github.com/abdul-hannan-SE',
-        live: '',
+        live: 'https://global-logistics-shipment-inventory.vercel.app',
       },
-      image: '',
+      image: 'assets/global-logistics/01-shipments.png',
       imageHint: 'logistics-inventory.png',
     },
     {
@@ -80,7 +80,7 @@ window.PORTFOLIO_DATA = {
         github: 'https://github.com/abdul-hannan-SE',
         live: '',
       },
-      image: '',
+      image: 'assets/hisab/01-dashboard-home.png',
       imageHint: 'hisab-nafay.png',
     },
   ],

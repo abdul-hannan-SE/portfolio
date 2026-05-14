@@ -521,15 +521,21 @@
       backdrop.classList.add("opacity-100", "pointer-events-auto");
       pane.classList.remove("translate-x-24", "scale-[0.965]", "opacity-95");
       pane.classList.add("translate-x-0", "scale-100", "opacity-100");
+      backdrop.setAttribute("aria-hidden", "false");
+      pane.setAttribute("aria-hidden", "false");
     }
 
     function closeProjectModal() {
       const backdrop = document.getElementById("projectModalBackdrop");
       const pane = document.getElementById("projectModal");
       if (!backdrop || !pane) return;
+      /** Remove open-state utilities or Tailwind can keep e.g. opacity-100 winning over opacity-0 */
+      backdrop.classList.remove("opacity-100", "pointer-events-auto");
       backdrop.classList.add("opacity-0", "pointer-events-none");
-      pane.classList.add("translate-x-24", "scale-[0.965]", "opacity-95");
       pane.classList.remove("translate-x-0", "scale-100", "opacity-100");
+      pane.classList.add("translate-x-24", "scale-[0.965]", "opacity-95");
+      backdrop.setAttribute("aria-hidden", "true");
+      pane.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
       setTimeout(() => {
         const c = document.getElementById("modalContent");
@@ -837,7 +843,10 @@
         if (e.target === backdrop) closeProjectModal();
       });
       window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeProjectModal();
+        if (e.key !== "Escape") return;
+        const b = document.getElementById("projectModalBackdrop");
+        if (!b || !b.classList.contains("opacity-100")) return;
+        closeProjectModal();
       });
     }
 
