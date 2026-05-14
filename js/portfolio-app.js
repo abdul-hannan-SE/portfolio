@@ -389,12 +389,6 @@
                           class="neon-border inline-flex min-w-[118px] flex-1 items-center justify-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15"><i class="fa-brands fa-github text-lg"></i>GitHub</a>`
                     : ""
                 }
-                ${
-                  pj.live
-                    ? `<a href="${escapeHTML(pj.live)}" target="_blank" rel="noopener noreferrer"
-                          class="neon-border inline-flex min-w-[128px] flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-neon-purple via-neon-pink to-[#0891bc] px-5 py-2 text-sm font-semibold text-white hover:brightness-[1.08]"><i class="fa-solid fa-globe"></i>Live</a>`
-                    : ""
-                }
                 <button type="button" data-modal-open="${pj.id}"
                   class="neon-border inline-flex items-center rounded-full px-5 py-2 text-sm font-semibold text-slate-200 hover:bg-white/10">Details</button>
               </div>
@@ -450,22 +444,22 @@
       const items = pj.gallery;
       if (!Array.isArray(items) || !items.length) return "";
       const cells = items
-        .map((g) => {
+        .map((g, i) => {
           const src = typeof g === "string" ? g : g.src;
-          const caption = typeof g === "string" ? "" : g.caption || "";
-          const alt = caption || pj.imageAlt || pj.title;
+          const alt = `${pj.title} — screenshot ${i + 1}`;
           return `<figure class="overflow-hidden rounded-xl neon-border bg-slate-900/40">
-            <img src="${escapeHTML(src)}" alt="${escapeHTML(alt)}" class="w-full max-h-[280px] object-cover object-top" loading="lazy" draggable="false" />
-            ${
-              caption
-                ? `<figcaption class="border-t border-white/10 px-3 py-2 text-[12px] leading-snug text-slate-400">${escapeHTML(caption)}</figcaption>`
-                : ""
-            }
+            <img src="${escapeHTML(src)}" alt="${escapeHTML(alt)}" title="Open carousel" class="w-full max-h-[min(320px,42vh)] cursor-pointer object-cover object-top transition hover:opacity-95" loading="lazy" draggable="false" />
           </figure>`;
         })
         .join("");
+      const overview =
+        pj.galleryOverview && String(pj.galleryOverview).trim()
+          ? `<p class="mb-4 text-[14px] leading-relaxed text-slate-300">${escapeHTML(pj.galleryOverview.trim())}</p>`
+          : "";
       return `<div class="mt-8">
         <h4 class="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-neon-purple/90">Screenshots</h4>
+        ${overview}
+        <p class="mb-4 text-[11px] leading-snug text-slate-500">Click any image for full size and slide through the gallery (arrows or swipe).</p>
         <div class="grid max-h-[min(62vh,720px)] gap-4 overflow-y-auto pr-1 sm:grid-cols-2">${cells}</div>
       </div>`;
     }
@@ -477,12 +471,15 @@
       const content = document.getElementById("modalContent");
       if (!pj || !backdrop || !pane || !content) return;
 
+      window.__portfolioLightboxItems = buildPortfolioLightboxSlides(pj);
+      window.__portfolioLightboxIndex = 0;
+
       document.body.style.overflow = "hidden";
       content.innerHTML = `
         <h3 id="modalTitleRef" class="font-display pr-14 text-2xl font-bold leading-tight">${escapeHTML(pj.title)}</h3>
         <div class="overflow-hidden rounded-2xl neon-border bg-slate-900/55">
-          <img src="${escapeHTML(pj.image)}" alt="${escapeHTML(pj.imageAlt)}"
-               class="aspect-video w-full object-cover" draggable="false" />
+          <img src="${escapeHTML(pj.image)}" alt="${escapeHTML(pj.imageAlt)}" title="Open carousel"
+               class="aspect-video w-full cursor-pointer object-cover transition hover:opacity-95" draggable="false" />
         </div>
         <p class="leading-relaxed text-slate-300">${escapeHTML(pj.longDescription || pj.description)}</p>
         <div>
@@ -509,12 +506,6 @@
                     class="neon-border inline-flex items-center gap-2 rounded-full bg-white/12 px-6 py-[10px] text-sm font-semibold hover:bg-white/18"><i class="fa-brands fa-github"></i> Repo</a>`
               : ""
           }
-          ${
-            pj.live
-              ? `<a href="${escapeHTML(pj.live)}" target="_blank" rel="noopener noreferrer"
-                    class="neon-border inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-neon-purple to-neon-cyan px-9 py-[10px] text-sm font-semibold text-white hover:brightness-110"><i class="fa-solid fa-up-right-from-square"></i> Live demo</a>`
-              : ""
-          }
         </div>`;
 
       backdrop.classList.remove("opacity-0", "pointer-events-none");
@@ -537,6 +528,7 @@
       backdrop.setAttribute("aria-hidden", "true");
       pane.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
+      screenshotLightboxClose();
       setTimeout(() => {
         const c = document.getElementById("modalContent");
         if (c) c.innerHTML = "";
@@ -836,6 +828,173 @@
       });
     }
 
+    function portfolioLightboxUrlKey(u) {
+      try {
+        return decodeURIComponent(new URL(u, window.location.href).pathname);
+      } catch {
+        return String(u || "");
+      }
+    }
+
+    function buildPortfolioLightboxSlides(pj) {
+      const slides = [];
+      const seen = new Set();
+      const add = (src, alt) => {
+        if (!src) return;
+        const key = portfolioLightboxUrlKey(src);
+        if (seen.has(key)) return;
+        seen.add(key);
+        slides.push({ src, alt: alt || "Screenshot" });
+      };
+      if (pj.image) add(pj.image, pj.imageAlt || pj.title);
+      if (Array.isArray(pj.gallery)) {
+        pj.gallery.forEach((g, i) => {
+          const src = typeof g === "string" ? g : g.src;
+          const alt =
+            typeof g === "string"
+              ? `${pj.title} — screenshot ${i + 1}`
+              : (g.caption || pj.imageAlt || pj.title);
+          add(src, alt);
+        });
+      }
+      return slides;
+    }
+
+    function screenshotLightboxRender() {
+      const items = window.__portfolioLightboxItems;
+      const lb = document.getElementById("screenshotLightbox");
+      const img = document.getElementById("screenshotLightboxImg");
+      const counter = document.getElementById("screenshotLightboxCounter");
+      const prev = document.getElementById("screenshotLightboxPrev");
+      const next = document.getElementById("screenshotLightboxNext");
+      if (!items || !items.length || !lb || !img) return;
+      let idx = window.__portfolioLightboxIndex | 0;
+      if (idx < 0) idx = 0;
+      if (idx >= items.length) idx = items.length - 1;
+      window.__portfolioLightboxIndex = idx;
+      const cur = items[idx];
+      img.src = cur.src;
+      img.alt = cur.alt;
+      if (counter) counter.textContent = items.length > 1 ? `${idx + 1} / ${items.length}` : "";
+      const multi = items.length > 1;
+      if (prev) {
+        prev.classList.toggle("hidden", !multi);
+        prev.classList.toggle("flex", multi);
+      }
+      if (next) {
+        next.classList.toggle("hidden", !multi);
+        next.classList.toggle("flex", multi);
+      }
+    }
+
+    function screenshotLightboxShow() {
+      const lb = document.getElementById("screenshotLightbox");
+      if (!lb) return;
+      lb.classList.remove("opacity-0", "pointer-events-none");
+      lb.classList.add("opacity-100", "pointer-events-auto");
+      lb.setAttribute("aria-hidden", "false");
+    }
+
+    function screenshotLightboxOpenAtSlide(clickedSrc) {
+      const items = window.__portfolioLightboxItems;
+      const lb = document.getElementById("screenshotLightbox");
+      if (!lb || !items || !items.length) return;
+      const key = portfolioLightboxUrlKey(clickedSrc);
+      let idx = items.findIndex((s) => portfolioLightboxUrlKey(s.src) === key);
+      if (idx < 0) idx = 0;
+      window.__portfolioLightboxIndex = idx;
+      screenshotLightboxRender();
+      screenshotLightboxShow();
+    }
+
+    function screenshotLightboxStep(delta) {
+      const items = window.__portfolioLightboxItems;
+      if (!items || !items.length) return;
+      const n = items.length;
+      window.__portfolioLightboxIndex = ((window.__portfolioLightboxIndex + delta) % n + n) % n;
+      screenshotLightboxRender();
+    }
+
+    function screenshotLightboxClose() {
+      const lb = document.getElementById("screenshotLightbox");
+      const img = document.getElementById("screenshotLightboxImg");
+      const counter = document.getElementById("screenshotLightboxCounter");
+      if (!lb) return;
+      lb.classList.remove("opacity-100", "pointer-events-auto");
+      lb.classList.add("opacity-0", "pointer-events-none");
+      lb.setAttribute("aria-hidden", "true");
+      window.__portfolioLightboxItems = [];
+      window.__portfolioLightboxIndex = 0;
+      if (img) {
+        img.src = "";
+        img.alt = "";
+      }
+      if (counter) counter.textContent = "";
+    }
+
+    function bindScreenshotLightbox() {
+      const lb = document.getElementById("screenshotLightbox");
+      const closeBtn = document.getElementById("screenshotLightboxClose");
+      const prev = document.getElementById("screenshotLightboxPrev");
+      const next = document.getElementById("screenshotLightboxNext");
+      const big = document.getElementById("screenshotLightboxImg");
+      if (!lb || !closeBtn || !big) return;
+
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        screenshotLightboxClose();
+      });
+
+      prev?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        screenshotLightboxStep(-1);
+      });
+      next?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        screenshotLightboxStep(1);
+      });
+
+      lb.addEventListener("click", (e) => {
+        if (!lb.classList.contains("opacity-100")) return;
+        const t = e.target;
+        if (t === big) return;
+        if (t.closest && t.closest("#screenshotLightboxPrev, #screenshotLightboxNext, #screenshotLightboxClose")) return;
+        screenshotLightboxClose();
+      });
+
+      let touchStartX = null;
+      lb.addEventListener(
+        "touchstart",
+        (e) => {
+          if (!lb.classList.contains("opacity-100")) return;
+          touchStartX = e.changedTouches[0].clientX;
+        },
+        { passive: true },
+      );
+      lb.addEventListener(
+        "touchend",
+        (e) => {
+          if (touchStartX == null || !lb.classList.contains("opacity-100")) return;
+          const dx = e.changedTouches[0].clientX - touchStartX;
+          touchStartX = null;
+          if (Math.abs(dx) < 48) return;
+          if (dx < 0) screenshotLightboxStep(1);
+          else screenshotLightboxStep(-1);
+        },
+        { passive: true },
+      );
+
+      document.addEventListener("click", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLImageElement)) return;
+        const modalContent = document.getElementById("modalContent");
+        if (!modalContent || !modalContent.contains(t)) return;
+        const src = t.currentSrc || t.src;
+        if (!src) return;
+        screenshotLightboxOpenAtSlide(src);
+      });
+    }
+
     function bindModalCloseAndBackdrop() {
       const backdrop = document.getElementById("projectModalBackdrop");
       document.getElementById("modalCloseBtn")?.addEventListener("click", closeProjectModal);
@@ -843,7 +1002,18 @@
         if (e.target === backdrop) closeProjectModal();
       });
       window.addEventListener("keydown", (e) => {
+        const lb = document.getElementById("screenshotLightbox");
+        const lbOpen = lb && lb.classList.contains("opacity-100");
+        if (lbOpen && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+          e.preventDefault();
+          screenshotLightboxStep(e.key === "ArrowLeft" ? -1 : 1);
+          return;
+        }
         if (e.key !== "Escape") return;
+        if (lbOpen) {
+          screenshotLightboxClose();
+          return;
+        }
         const b = document.getElementById("projectModalBackdrop");
         if (!b || !b.classList.contains("opacity-100")) return;
         closeProjectModal();
@@ -956,6 +1126,7 @@
 
       bindSmoothScroll();
       bindModalCloseAndBackdrop();
+      bindScreenshotLightbox();
 
       typeof AOS !== "undefined" &&
         AOS.init({

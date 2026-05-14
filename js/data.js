@@ -27,7 +27,7 @@ window.SITE_CONFIG = {
  *   category: 'Backend' | 'Full Stack' | …,
  *   description: 'Short compelling description.',
  *   tech: ['Node.js', 'MongoDB'],
- *   links: { github: 'https://github.com/user/repo', live: 'https://…' },
+ *   links: { github: 'https://github.com/user/repo', live: '' },
  *   image: 'assets/projects/my-app.png',
  *   imageHint: 'my-app.png',
  * },
@@ -50,7 +50,7 @@ window.PORTFOLIO_DATA = {
       tech: ['Next.js', 'MongoDB', 'React.js', 'Vercel'],
       links: {
         github: 'https://github.com/abdul-hannan-SE/Carrier-Trips-Management-System',
-        live: 'https://nafaymotors-accounts-pkuc.vercel.app',
+        live: '',
       },
       image: 'assets/carrier-trips/01-dashboard.png',
       imageHint: 'carrier-trips.png',
@@ -63,8 +63,8 @@ window.PORTFOLIO_DATA = {
         'Enterprise logistics management system tracking vehicle shipments from storage yards to shipping ports. Integrated AWS cloud storage for scalable media management and optimized for high-volume operational data.',
       tech: ['Node.js', 'Express.js', 'MongoDB', 'AWS'],
       links: {
-        github: 'https://github.com/abdul-hannan-SE',
-        live: 'https://global-logistics-shipment-inventory.vercel.app',
+        github: 'https://github.com/abdul-hannan-SE/global_logistics_inventory',
+        live: '',
       },
       image: 'assets/global-logistics/01-shipments.png',
       imageHint: 'logistics-inventory.png',

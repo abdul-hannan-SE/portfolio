@@ -284,6 +284,54 @@
           <div id="modalContent" class="p-8 md:p-10 pt-[68px] space-y-6"></div>
         </div>
       </div>
+
+      <!-- Full-size screenshot carousel (above project modal z-index) -->
+      <div
+        id="screenshotLightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+        aria-label="Screenshot carousel"
+        class="fixed inset-0 z-[10120] flex flex-col items-center justify-center bg-black/90 p-4 pt-14 pb-8 opacity-0 pointer-events-none transition-opacity duration-200 backdrop-blur-sm md:p-8 md:pt-10"
+      >
+        <button
+          type="button"
+          id="screenshotLightboxClose"
+          class="absolute right-4 top-4 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10 md:right-6 md:top-6"
+          aria-label="Close carousel"
+        >
+          <i class="fa-solid fa-times text-lg"></i>
+        </button>
+        <button
+          type="button"
+          id="screenshotLightboxPrev"
+          class="absolute left-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-white/15 md:left-6 md:h-14 md:w-14"
+          aria-label="Previous screenshot"
+        >
+          <i class="fa-solid fa-chevron-left text-lg md:text-xl"></i>
+        </button>
+        <button
+          type="button"
+          id="screenshotLightboxNext"
+          class="absolute right-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-white/15 md:right-6 md:h-14 md:w-14"
+          aria-label="Next screenshot"
+        >
+          <i class="fa-solid fa-chevron-right text-lg md:text-xl"></i>
+        </button>
+        <div class="flex max-h-full w-full max-w-[min(96vw,1500px)] flex-col items-center justify-center gap-2">
+          <img
+            id="screenshotLightboxImg"
+            src=""
+            alt=""
+            class="max-h-[min(78vh,1040px)] w-auto max-w-full cursor-default rounded-lg object-contain shadow-2xl ring-1 ring-white/15 select-none"
+            draggable="false"
+          />
+          <p id="screenshotLightboxCounter" class="min-h-[1.25rem] text-center text-[13px] font-medium tabular-nums text-slate-200"></p>
+          <p class="max-w-md px-4 text-center text-[11px] leading-snug text-slate-500">
+            <span class="hidden sm:inline">Arrow keys</span><span class="sm:hidden">Swipe</span> or side buttons to change slide · Esc to close
+          </p>
+        </div>
+      </div>
     </section>
 
     <!-- SKILLS -->

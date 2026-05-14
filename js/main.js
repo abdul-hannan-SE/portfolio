@@ -34,18 +34,13 @@ function skillTabs() {
 window.skillTabs = skillTabs;
 
 function projectCardInner(p) {
-  const previewUrl = (p.links && (p.links.live || p.links.github)) || '#';
+  const previewUrl = (p.links && p.links.github) || '#';
   const imgBlock = p.image
     ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)} screenshot" class="h-48 w-full rounded-xl object-cover project-shot" loading="lazy" />`
     : `<div class="h-48 w-full rounded-xl bg-gradient-to-br from-accent-purple/15 via-slate-100 to-accent-cyan/15 flex items-center justify-center text-slate-500 text-sm border border-slate-200/90 relative overflow-hidden">
          <span class="relative z-10 px-4 text-center">Add screenshot<br/><span class="text-xs text-slate-500">${escapeHtml(p.imageHint || 'set image URL in PORTFOLIO_DATA')}</span></span>
        </div>`;
-  const liveBtn =
-    p.links && p.links.live
-      ? `<a href="${escapeHtml(p.links.live)}" target="_blank" rel="noopener" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center border border-slate-200 text-accent-cyan hover:shadow-glow shadow-sm" title="Live Demo"><i class="fa-solid fa-up-right-from-square"></i></a>`
-      : '';
   const gh = p.links && p.links.github ? escapeHtml(p.links.github) : '#';
-  const live = p.links && p.links.live ? escapeHtml(p.links.live) : '';
   const comment = `<!-- ADD PROJECT SCREENSHOT: ${p.imageHint || p.slug}.png -->`;
   return `
     ${comment}
@@ -53,7 +48,6 @@ function projectCardInner(p) {
       <div class="relative overflow-hidden">
         ${imgBlock}
         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-slate-900/10 to-transparent opacity-70 pointer-events-none"></div>
-        ${liveBtn}
         <a href="${gh}" target="_blank" rel="noopener" class="absolute top-4 left-4 z-20 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center border border-slate-200 text-slate-800 hover:shadow-glow shadow-sm" title="GitHub"><i class="fa-brands fa-github"></i></a>
         <a href="${escapeHtml(previewUrl)}" target="_blank" rel="noopener" class="overlay-cta absolute inset-0 z-10 flex items-center justify-center bg-slate-900/55 backdrop-blur-[2px] text-decoration-none">
           <span class="rounded-full px-6 py-2 bg-gradient-to-r from-accent-purple to-accent-cyan text-white font-semibold text-sm shadow-glow">View Project</span>
@@ -68,7 +62,6 @@ function projectCardInner(p) {
         </div>
         <div class="flex gap-3">
           <a href="${gh}" target="_blank" rel="noopener" class="ripple flex-1 text-center rounded-xl py-2.5 text-sm font-medium border border-slate-200 hover:border-accent-purple text-slate-800 bg-white/80 transition-all"><i class="fa-brands fa-github mr-2"></i>GitHub</a>
-          ${live ? `<a href="${live}" target="_blank" rel="noopener" class="ripple flex-1 text-center rounded-xl py-2.5 text-sm font-semibold bg-gradient-to-r from-accent-purple to-accent-cyan border border-transparent text-white shadow-sm"><i class="fa-solid fa-link mr-2"></i>Live</a>` : `<span class="flex-1 text-center rounded-xl py-2.5 text-sm text-slate-500 border border-slate-200 bg-slate-50">No live URL</span>`}
         </div>
       </div>
     </article>
