@@ -16,10 +16,10 @@
   ADD CONTENT: Edit js/portfolio-data.js (site copy, projects, skills, experience).
   ═══════════════════════════════════════════════════════════════════════════
 -->
-<html lang="en" class="scroll-smooth dark" x-data="app()" x-init="initApp()" xmlns:x-transition="ignored">
+<html lang="en" class="scroll-smooth dark overflow-x-hidden max-w-full" x-data="app()" x-init="initApp()" xmlns:x-transition="ignored">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="Abdul Hannan — Backend Developer. Node.js, Laravel, REST APIs. Open for freelance worldwide." />
   <title>Abdul Hannan | Backend Developer · Portfolio Template</title>
 
@@ -39,6 +39,9 @@
       darkMode: "class",
       theme: {
         extend: {
+          screens: {
+            xs: "480px",
+          },
           fontFamily: {
             display: ["Poppins", "Inter", "system-ui", "sans-serif"],
             sans: ["Inter", "system-ui", "sans-serif"],
@@ -77,7 +80,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="font-sans text-slate-100 bg-[#030712] bg-grid bg-[length:40px_40px] noise relative overflow-x-hidden selection:bg-[#ec4899]/25 selection:text-white">
+<body class="font-sans text-slate-100 bg-[#030712] bg-grid bg-[length:40px_40px] noise relative overflow-x-hidden antialiased selection:bg-[#ec4899]/25 selection:text-white [text-size-adjust:100%]">
   <script src="js/portfolio-data.js"></script>
 
   <!-- Glow cursor -->
@@ -89,24 +92,24 @@
     <div id="scrollProgress" class="h-full w-0 bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan shadow-[0_0_26px_rgba(168,85,247,0.55)] origin-left transition-[width] duration-100 ease-linear"></div>
   </div>
 
-  <main class="relative z-10 min-h-screen bg-slate-body">
+  <main class="relative z-10 min-h-screen min-w-0 max-w-full overflow-x-hidden bg-slate-body">
     <!-- Nav -->
     <header
       id="siteNav"
       x-data="{ open:false }"
       @keydown.escape.window="open=false"
-      class="fixed top-2 inset-x-0 z-[9100] px-4 sm:px-6 transition-transform duration-500 md:duration-700 will-change-transform"
+      class="fixed top-2 inset-x-0 z-[9100] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 transition-transform duration-500 md:duration-700 will-change-transform"
       data-nav-root
       style="-webkit-backface-visibility: hidden; backface-visibility: hidden;"
     >
-      <nav id="glassNavBar" class="glass-strong neon-border mx-auto max-w-6xl rounded-2xl px-4 sm:px-6 py-3 flex flex-wrap lg:flex-nowrap items-center justify-between gap-3 shadow-xl shadow-purple-950/30">
-        <a href="#home" id="brandLink" data-smooth-scroll class="flex items-center gap-3 group">
+      <nav id="glassNavBar" class="glass-strong neon-border mx-auto max-w-6xl min-w-0 rounded-2xl px-3 sm:px-6 py-2.5 sm:py-3 flex flex-wrap lg:flex-nowrap items-center justify-between gap-2 sm:gap-3 shadow-xl shadow-purple-950/30">
+        <a href="#home" id="brandLink" data-smooth-scroll class="flex min-w-0 shrink items-center gap-2 sm:gap-3 group touch-manipulation">
           <span class="relative flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-neon-purple via-fuchsia-500 to-neon-cyan text-xl font-display font-black text-white tracking-tighter shadow-[0_0_24px_rgba(168,85,247,0.45)] group-hover:scale-105 transition-transform">
             AH
             <span class="pointer-events-none absolute inset-px rounded-[11px] border border-white/15"></span>
           </span>
-          <span class="hidden xs:block">
-            <span id="navBrandName" class="font-display font-semibold text-lg tracking-tight text-white dark:text-white block leading-tight">Loading…</span>
+          <span class="hidden xs:block min-w-0">
+            <span id="navBrandName" class="font-display font-semibold text-base sm:text-lg tracking-tight text-white dark:text-white block leading-tight truncate max-w-[42vw] xs:max-w-none">Loading…</span>
             <span id="navBrandTitle" class="text-[11px] tracking-[0.2em] uppercase text-[#64748b] dark:text-[#8090aa]">…</span>
           </span>
         </a>
@@ -121,16 +124,7 @@
           <li><a href="#contact" class="nav-link relative py-1" data-section="contact" data-smooth-scroll>Contact</a></li>
         </ul>
 
-        <div class="flex items-center gap-2 md:gap-3">
-          <button
-            type="button"
-            id="themeToggle"
-            aria-label="Toggle light and dark theme"
-            class="relative h-10 w-10 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 flex items-center justify-center transition text-slate-200"
-          >
-            <i id="themeIconSun" class="fa-solid fa-sun absolute text-xl opacity-0 scale-75 transition-all"></i>
-            <i id="themeIconMoon" class="fa-solid fa-moon absolute text-xl transition-all"></i>
-          </button>
+        <div class="flex shrink-0 items-center gap-1.5 sm:gap-2 md:gap-3 touch-manipulation">
           <a
             href="#contact"
             data-smooth-scroll
@@ -142,7 +136,7 @@
           <!-- Mobile burger -->
           <button
             type="button"
-            class="lg:hidden inline-flex flex-col gap-1.5 p-2 rounded-lg border border-white/10 hover:bg-white/5"
+            class="lg:hidden inline-flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-1.5 rounded-lg border border-white/10 hover:bg-white/5 touch-manipulation"
             @click="open = !open"
             :aria-expanded="open.toString()"
             aria-label="Menu"
@@ -158,7 +152,7 @@
           x-show="open"
           x-transition.duration.300ms
           x-cloak
-          class="lg:hidden mt-4 w-full border-t border-white/10 pt-4 flex flex-col gap-2 text-[15px] font-medium pb-4"
+          class="lg:hidden mt-3 sm:mt-4 w-full min-w-0 max-h-[min(70dvh,520px)] overflow-y-auto overscroll-contain border-t border-white/10 pt-3 sm:pt-4 flex flex-col gap-1.5 sm:gap-2 text-[15px] font-medium pb-3 sm:pb-4 touch-manipulation"
           @click.outside="open = false"
         >
           <a href="#home" class="mobile-nav px-4 py-2 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4" data-smooth-scroll @click="open=false"><span data-section="home" class="">Home</span> <i class="fa-solid fa-chevron-right opacity-35 text-xs"></i></a>
@@ -177,7 +171,7 @@
     </aside>
 
     <!-- HERO -->
-    <section id="home" data-section-marker="home" class="relative min-h-screen flex items-center justify-center px-6 overflow-hidden pt-36 pb-20 md:pb-28">
+    <section id="home" data-section-marker="home" class="relative min-h-[100dvh] min-h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden pt-28 pb-28 sm:pt-36 sm:pb-20 md:pb-28">
       <div class="absolute inset-0 pointer-events-none -z-[1] particle-line bg-[linear-gradient(rgba(15,23,42,0.65),transparent)]"></div>
       <div class="particles-bg absolute inset-0 -z-[1] opacity-95">
         <div id="particles-js" aria-hidden="true"></div>
@@ -188,19 +182,19 @@
       <div class="floating-blob pointer-events-none absolute bottom-[-20vmax] right-[-10vmax] w-[clamp(300px,45vw,520px)] h-[clamp(280px,40vw,500px)] rounded-full bg-gradient-to-tl from-[#06b6d4]/25 via-transparent to-[#ec4899]/35 blur-[120px]" style="animation: gradient-wave 32s infinite linear;"></div>
       <div class="floating-blob particle-dot pointer-events-none absolute top-[52%] right-[33%] w-72 h-72 rounded-full opacity-40 blur-3xl bg-neon-lime/12"></div>
 
-      <div class="relative mx-auto flex max-w-5xl flex-col items-center lg:items-start text-center lg:text-left gap-y-11">
-        <div class="space-y-4 max-w-xl lg:max-w-2xl" data-aos="fade-down" data-aos-duration="800" data-aos-once="true">
-          <p id="heroKicker" class="inline-flex items-center px-5 py-1.5 rounded-full border border-white/15 glass text-[13px] font-medium tracking-[0.18em] uppercase text-[#aab6d4] neon-border">
+      <div class="relative mx-auto flex w-full min-w-0 max-w-5xl flex-col items-center lg:items-start text-center lg:text-left gap-y-8 sm:gap-y-11">
+        <div class="w-full min-w-0 space-y-3 sm:space-y-4 max-w-xl lg:max-w-2xl" data-aos="fade-down" data-aos-duration="800" data-aos-once="true">
+          <p id="heroKicker" class="inline-flex max-w-full flex-wrap items-center justify-center gap-x-1 px-3 py-1.5 sm:px-5 rounded-full border border-white/15 glass text-[11px] sm:text-[13px] font-medium tracking-[0.14em] sm:tracking-[0.18em] uppercase text-[#aab6d4] neon-border lg:justify-start">
             <span id="blinkDot" class="mr-3 flex h-[7px] w-[7px] rounded-full bg-gradient-to-br from-emerald-400 to-neon-lime animate-pulse"></span>
             <span id="hiLabelSpan">Hi, I'm</span>
           </p>
-          <h1 id="heroTitle" class="font-display tracking-tighter text-[clamp(2.6rem,5vw,4.05rem)] font-extrabold leading-none">
+          <h1 id="heroTitle" class="font-display tracking-tighter text-[clamp(1.85rem,5.5vw+0.4rem,4.05rem)] font-extrabold leading-[1.05] sm:leading-none break-words">
             <span class="text-slate-200 dark:text-[#eaf0ff]" id="heroName"></span><br />
             <span id="typedWrap" class="bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent animate-gradient-shift">
               <span id="typedOutput" class="underline decoration-transparent"></span><span></span><span aria-hidden class="animate-pulse">|</span>
             </span>
           </h1>
-          <p id="heroBio" class="text-base md:text-[17px] leading-relaxed text-slate-300 max-w-xl md:max-w-xl mx-auto lg:mx-0 lg:max-w-xl"></p>
+          <p id="heroBio" class="text-[15px] sm:text-base md:text-[17px] leading-relaxed text-slate-300 max-w-xl md:max-w-xl mx-auto lg:mx-0 lg:max-w-xl px-1 sm:px-0"></p>
           <div class="flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-4 pt-2">
             <a href="#projects" data-smooth-scroll class="w-full max-w-[280px] sm:w-auto sm:max-w-none flex items-center justify-center gap-2 px-10 py-[14px] rounded-full bg-white text-black font-semibold shadow-[0_0_42px_rgba(255,255,255,0.18)] hover:-translate-y-0.5 transition">
               View My Work
@@ -214,12 +208,12 @@
         </div>
 
         <!-- Mobile social inline -->
-        <div id="heroSocialInline" data-aos="fade-up" class="xl:hidden flex flex-row flex-wrap gap-6 justify-center -mt-6"></div>
+        <div id="heroSocialInline" data-aos="fade-up" class="xl:hidden flex flex-row flex-wrap gap-4 sm:gap-6 justify-center -mt-2 sm:-mt-6 w-full px-2"></div>
       </div>
 
       <div aria-hidden data-aos="fade-up" data-aos-delay="200" data-aos-once="true" data-aos-offset="-10" data-aos-duration="990" data-aos-once-duration="990" data-aos-once-offset="-10"
         data-aos-once-placement="fade-up-delayed"
-        class="absolute inset-x-0 bottom-12 flex justify-center animate-bounce-slow mt-28">
+        class="absolute inset-x-0 bottom-6 sm:bottom-12 flex justify-center animate-bounce-slow mt-16 sm:mt-28 pb-[env(safe-area-inset-bottom,0px)]">
         <a href="#about" aria-label="Scroll to about section" id="heroScrollCue" data-smooth-scroll class="glass px-10 py-[10px] rounded-full neon-border shadow-neon hover:shadow-xl flex flex-col items-center gap-1 text-[11px] tracking-[0.28em] font-semibold text-slate-300">
           Scroll
           <i class="fa-solid fa-angle-down animate-bounce mt-px text-neon-purple"></i>
@@ -228,21 +222,21 @@
     </section>
 
     <!-- ABOUT -->
-    <section id="about" data-section-marker="about" class="relative py-[110px] md:py-32 px-4 sm:px-8">
-      <div class="max-w-6xl mx-auto grid lg:grid-cols-[1fr,1fr] gap-14 lg:gap-20 items-start">
-        <div data-aos="fade-right" data-aos-once="true" class="space-y-10">
+    <section id="about" data-section-marker="about" class="relative scroll-mt-24 sm:scroll-mt-28 py-16 sm:py-24 md:py-32 px-4 sm:px-8">
+      <div class="max-w-6xl mx-auto grid lg:grid-cols-[1fr,1fr] gap-10 sm:gap-14 lg:gap-20 items-start">
+        <div data-aos="fade-right" data-aos-once="true" class="space-y-6 sm:space-y-10">
           <div>
-            <h2 id="aboutHeadingEl" class="font-display tracking-tighter text-[34px] sm:text-[40px] font-bold mb-3">
+            <h2 id="aboutHeadingEl" class="font-display tracking-tighter text-[clamp(1.65rem,5vw,2.5rem)] sm:text-[40px] font-bold mb-3">
               <span class="text-slate-200">About&nbsp;</span>
               <span class="gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent">Me</span>
             </h2>
             <p id="aboutBio" class="text-slate-300 leading-relaxed text-[15px] md:text-base"></p>
           </div>
-          <div class="glass neon-border px-8 py-[18px] inline-flex rounded-2xl items-center gap-3 text-sm font-semibold text-neon-lime border border-emerald-400/20 bg-emerald-400/10">
-            <span class="h-9 w-9 rounded-xl bg-black/35 flex items-center justify-center shadow-inner">
+          <div class="glass neon-border px-4 py-3 sm:px-8 sm:py-[18px] flex flex-wrap sm:inline-flex max-w-full rounded-2xl items-center gap-3 text-xs sm:text-sm font-semibold text-neon-lime border border-emerald-400/20 bg-emerald-400/10">
+            <span class="h-9 w-9 shrink-0 rounded-xl bg-black/35 flex items-center justify-center shadow-inner">
               <i class="fa-regular fa-clock text-neon-lime animate-pulse"></i>
             </span>
-            <span>Available for Freelance Opportunities</span>
+            <span class="min-w-0 leading-snug">Available for Freelance Opportunities</span>
           </div>
         </div>
         <div class="flex flex-col gap-8" data-aos="fade-left" data-aos-once="true">
@@ -260,15 +254,15 @@
     </section>
 
     <!-- PROJECTS -->
-    <section id="projects" data-section-marker="projects" class="py-[110px] md:py-32 px-2 sm:px-6 lg:px-10 relative overflow-hidden">
+    <section id="projects" data-section-marker="projects" class="scroll-mt-24 sm:scroll-mt-28 py-16 sm:py-24 md:py-32 px-0 sm:px-4 lg:px-10 relative overflow-hidden">
       <div aria-hidden class="particle-line absolute inset-x-10 top-[30%] h-px bg-white/10 -z-[1]" style="opacity:0.43"></div>
-      <header class="text-center mb-16 max-w-3xl mx-auto px-6" data-aos="fade-up" data-aos-once="true">
-        <h2 id="featuredProjectsHeading" class="font-display tracking-tighter text-[32px] sm:text-[40px] mb-6 font-semibold gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent pb-px">
+      <header class="text-center mb-10 sm:mb-16 max-w-3xl mx-auto px-4 sm:px-6" data-aos="fade-up" data-aos-once="true">
+        <h2 id="featuredProjectsHeading" class="font-display tracking-tighter text-[clamp(1.5rem,5vw,2.5rem)] sm:text-[40px] mb-4 sm:mb-6 font-semibold gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent pb-px">
           Featured Projects
         </h2>
         <p id="projectsIntro" class="text-slate-400 text-[15px] leading-relaxed">Selected builds — backends, dashboards, integrations, logistics automation — populated entirely from your <code class="text-neon-purple/95 text-[13px]">portfolioData.projects</code> array.</p>
       </header>
-      <div class="max-w-[1280px] mx-auto swiper project-swiper relative px-8 py-12">
+      <div class="max-w-[1280px] mx-auto swiper project-swiper relative px-3 sm:px-6 md:px-8 py-8 sm:py-12 min-w-0">
         <div class="swiper-wrapper pb-14" id="projectSwipeWrapper"></div>
         <div class="swiper-pagination !bottom-[3px]" style="--swiper-pagination-color:#a855f7"></div>
         <div class="swiper-button-prev !hidden md:!flex !text-[#cfd7ff]" style="opacity: .45"></div>
@@ -277,11 +271,11 @@
 
       <!-- Project modal -->
       <div id="projectModalBackdrop" tabindex="-1" aria-hidden="true" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[10050] opacity-0 pointer-events-none transition-opacity duration-300 flex justify-center md:justify-end items-start md:items-center p-0 md:p-6">
-        <div id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitleRef" tabindex="-1" aria-hidden="true" class="outline-none neon-border rounded-none md:rounded-3xl max-w-xl w-[100vw] lg:max-w-3xl h-full md:h-auto overflow-y-auto max-h-none md:max-h-[calc(92vh)] glass-strong relative transition-all duration-350 scale-[0.965] opacity-95 translate-x-24 shadow-[0_0_80px_#a855f755]">
-          <button type="button" id="modalCloseBtn" class="sticky top-0 z-[1] mb-[-36px] float-right mr-7 mt-[18px] w-11 h-11 rounded-full neon-border hover:bg-black/55 flex justify-center items-center text-white backdrop-blur">
+        <div id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitleRef" tabindex="-1" aria-hidden="true" class="outline-none neon-border rounded-none md:rounded-3xl max-w-xl w-full min-w-0 lg:max-w-3xl h-full md:h-auto overflow-y-auto max-h-none md:max-h-[calc(92vh)] glass-strong relative transition-all duration-300 md:duration-350 scale-[0.965] opacity-95 translate-y-6 translate-x-0 md:translate-y-0 md:translate-x-24 shadow-[0_0_80px_#a855f755] pb-[env(safe-area-inset-bottom,0px)]">
+          <button type="button" id="modalCloseBtn" class="sticky top-0 z-[1] mb-[-36px] float-right mr-4 sm:mr-7 mt-3 sm:mt-[18px] min-h-[44px] min-w-[44px] rounded-full neon-border hover:bg-black/55 flex justify-center items-center text-white backdrop-blur touch-manipulation">
             <i class="fa-solid fa-times text-xl"></i>
           </button>
-          <div id="modalContent" class="p-8 md:p-10 pt-[68px] space-y-6"></div>
+          <div id="modalContent" class="p-4 sm:p-8 md:p-10 pt-14 sm:pt-[68px] space-y-5 sm:space-y-6"></div>
         </div>
       </div>
 
@@ -318,7 +312,7 @@
         >
           <i class="fa-solid fa-chevron-right text-lg md:text-xl"></i>
         </button>
-        <div class="flex max-h-full w-full max-w-[min(96vw,1500px)] flex-col items-center justify-center gap-2">
+        <div class="flex max-h-full w-full max-w-full min-w-0 sm:max-w-[1500px] flex-col items-center justify-center gap-2 px-1">
           <img
             id="screenshotLightboxImg"
             src=""
@@ -335,28 +329,28 @@
     </section>
 
     <!-- SKILLS -->
-    <section id="skills" data-section-marker="skills" class="relative py-[110px] px-6 md:px-14">
+    <section id="skills" data-section-marker="skills" class="relative scroll-mt-24 sm:scroll-mt-28 py-16 sm:py-24 md:py-[110px] px-4 sm:px-6 md:px-14">
       <div class="max-w-7xl mx-auto">
-        <h2 id="skillsHeading" data-aos="fade-up" class="gradient-text-heading text-center mb-14 font-display text-[clamp(31px,4vw,40px)] font-bold bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent pb-px">
+        <h2 id="skillsHeading" data-aos="fade-up" class="gradient-text-heading text-center mb-8 sm:mb-14 font-display text-[clamp(1.35rem,4vw,2.5rem)] sm:text-[40px] font-bold bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent pb-px px-2">
           Tech Stack
         </h2>
 
         <!-- Skill tabs wired by JS -->
-        <div id="skillTabsWrap" data-aos="fade-up" class="glass neon-border px-7 py-[18px] flex flex-wrap justify-center gap-[10px] mb-14 max-w-fit mx-auto rounded-full"></div>
+        <div id="skillTabsWrap" data-aos="fade-up" class="glass neon-border px-3 py-3 sm:px-7 sm:py-[18px] flex flex-wrap justify-center gap-2 sm:gap-[10px] mb-10 sm:mb-14 w-full max-w-full sm:max-w-fit mx-auto rounded-2xl sm:rounded-full"></div>
 
-        <div id="skillCardsGrid" class="grid xs:grid-cols-2 md:grid-cols-4 gap-10"></div>
+        <div id="skillCardsGrid" class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-5 sm:gap-8 md:gap-10 min-w-0"></div>
       </div>
     </section>
 
     <!-- EXPERIENCE -->
-    <section id="experience" data-section-marker="experience" class="relative py-[110px] md:py-34 px-4 sm:px-8">
+    <section id="experience" data-section-marker="experience" class="relative scroll-mt-24 sm:scroll-mt-28 py-16 sm:py-24 md:py-32 px-4 sm:px-8">
       <div class="max-w-6xl mx-auto">
-        <h2 data-aos="fade-up" class="gradient-text-heading text-center mb-[78px] font-display text-[33px] sm:text-[41px] font-bold bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent">
+        <h2 data-aos="fade-up" class="gradient-text-heading text-center mb-12 sm:mb-[78px] font-display text-[clamp(1.5rem,5vw,2.55rem)] sm:text-[41px] font-bold bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent px-2">
           Professional Journey
         </h2>
 
         <!-- Timeline gradient line wrapper -->
-        <div class="relative pl-14 sm:pl-20">
+        <div class="relative pl-11 sm:pl-20 min-w-0">
           <!-- Mobile line -->
           <div class="absolute left-[18px] sm:left-[42px] top-0 bottom-0 w-[2px] timeline-glow particle-line rounded-full opacity-95"></div>
 
@@ -367,12 +361,12 @@
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" data-section-marker="contact" class="relative py-[110px] md:pb-44 px-4 sm:px-8">
-      <div class="max-w-7xl mx-auto grid lg:grid-cols-[0.93fr_1.16fr] gap-16 xl:gap-[78px]">
+    <section id="contact" data-section-marker="contact" class="relative scroll-mt-24 sm:scroll-mt-28 py-16 sm:py-24 md:py-32 md:pb-44 px-4 sm:px-8">
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-[0.93fr_1.16fr] gap-10 sm:gap-16 xl:gap-[78px] min-w-0">
         <div class="relative z-[1]" data-aos="fade-right">
           <div class="particle-line absolute inset-0 bg-gradient-to-t from-purple-950/65 to-transparent blur-3xl rounded-3xl -z-[5] opacity-95"></div>
-          <header class="mb-14">
-            <h2 class="font-display text-[32px] sm:text-[43px] font-bold leading-tighter tracking-tighter text-white pb-px">
+          <header class="mb-8 sm:mb-14">
+            <h2 class="font-display text-[clamp(1.5rem,5vw,2.7rem)] sm:text-[43px] font-bold leading-tight sm:leading-tighter tracking-tighter text-white pb-px">
               Let's Build Something&nbsp;
               <span class="gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent">Amazing</span>
             </h2>
@@ -383,7 +377,7 @@
 
         <div id="contactFormOuter" data-aos="fade-left">
           <!-- Form -->
-          <form id="contactForm" class="glass-strong neon-border p-8 md:p-[44px_48px_40px] rounded-3xl space-y-[22px]" novalidate>
+          <form id="contactForm" class="glass-strong neon-border p-5 sm:p-8 md:p-[44px_48px_40px] rounded-2xl sm:rounded-3xl space-y-4 sm:space-y-[22px] min-w-0" novalidate>
             <label class="block text-[13px] font-semibold uppercase tracking-[0.19em] text-slate-300 font-display">Hey, what's your name? <span id="lblNameAst" style="opacity:.92" class="text-neon-lime animate-pulse">*</span></label>
             <input name="from_name" type="text" id="fldName" class="rounded-2xl w-full particle-line bg-transparent border px-7 py-[14px] border-white/[0.095] neon-border hover:border-[#fff3] focus-visible:outline-none ring-2 focus-visible:ring-neon-purple placeholder:text-[#aab5d9]/80" maxlength="140" autocomplete="given-name" required placeholder="Ada Lovelace" />
 
@@ -419,7 +413,7 @@
             </button>
 
             <!-- Privacy: mailto draft (see portfolioData.personal.email + ejHelp) -->
-            <p id="ejHelp" style="opacity:0.71" class="text-[13px] text-center px-10 text-slate-400"></p>
+            <p id="ejHelp" style="opacity:0.71" class="text-[12px] sm:text-[13px] text-center px-3 sm:px-10 text-slate-400"></p>
 
           </form>
         </div>
@@ -427,15 +421,15 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="py-24 border-t border-white/10 backdrop-blur glass relative">
-      <div class="flex flex-wrap justify-base justify-between px-16 items-center mx-auto gap-10 max-w-6xl">
+    <footer class="py-14 sm:py-24 border-t border-white/10 backdrop-blur glass relative pb-[max(3rem,env(safe-area-inset-bottom))]">
+      <div class="flex flex-col sm:flex-row flex-wrap justify-between items-center mx-auto gap-8 sm:gap-10 max-w-6xl px-4 sm:px-8 md:px-12 lg:px-16 text-center sm:text-left">
         <span class="font-display tracking-tighter text-xl font-semibold gradient-text-heading bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent uppercase">AH Portfolio</span>
         <nav id="footerSocialWrap" aria-label="Social" class="flex gap-[18px]" style="-webkit-mask-image:unset; mask-image:unset"></nav>
       </div>
-      <span class="text-center px-14 block pb-13 text-[14px] text-slate-500 pt-17">
+      <span class="text-center px-4 sm:px-8 block pb-4 sm:pb-6 text-[13px] sm:text-[14px] text-slate-500 pt-8 sm:pt-12">
         <span id="footerBuiltCopy">Built &amp; designed by Abdul Hannan</span>
       </span>
-      <small class="text-center block pb-22 text-[12px] text-slate-500">
+      <small class="text-center block px-4 pb-8 text-[11px] sm:text-[12px] text-slate-500 leading-relaxed">
         © <span id="footerYear"></span> — All Rights Reserved.<br />
         Portfolio · Template-ready · JS-configured
       </small>

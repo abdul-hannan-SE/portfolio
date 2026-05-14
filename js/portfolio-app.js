@@ -1,5 +1,3 @@
-    const THEME_LS_KEY = "portfolio-template-theme-dark";
-
     // Alpine root for nav hide & micro-state (optional placeholders)
     function app() {
       return {
@@ -142,7 +140,7 @@
             s,
             i,
           ) => `
-        <article class="neon-border tilt-card glass-strong rounded-3xl pb-12 pt-[23px] px-7 flex flex-col items-center text-center tilt-card-stats"
+        <article class="neon-border tilt-card glass-strong rounded-2xl sm:rounded-3xl pb-8 sm:pb-12 pt-5 sm:pt-[23px] px-5 sm:px-7 flex flex-col items-center text-center tilt-card-stats min-w-0"
           >
           <div class="timeline-pulse particle-line relative mx-auto mb-6 flex items-center justify-center h-13 w-[52px] rounded-2xl border border-[#ffffff16] neon-border backdrop-blur">
             <span class="${i===0?'text-neon-lime':'text-neon-purple'} animate-pulse text-[22px]"><i class="fa-solid ${s.icon} drop-shadow-xl"></i></span>
@@ -172,7 +170,7 @@
             skill,
           ) => `
         <article class=\"mb-[18px] group\">
-           <header class=\"mb-2 mt-px flex gap-7 items-center\">
+           <header class=\"mb-2 mt-px flex flex-wrap gap-x-3 gap-y-1 items-center sm:gap-7\">
              <span class=\"text-[23px]\"><i class=\"${skill.icon} text-transparent bg-gradient-to-tr from-[#a855f7] to-[#06b6d4] [-webkit-background-clip:text]\"></i></span>
              <span class=\"font-semibold text-[17px]\">${skill.name} <span class=\"tabular-nums text-[14px] text-slate-400/95\">${skill.level}%</span></span>
            </header>
@@ -206,7 +204,7 @@
         .map((catRaw, ti) => {
           const slug = catRaw.replace(/\s+/g, "").toLowerCase();
           tabSlug[slug] = catRaw;
-          return `<button role="tab" type="button" data-skilltab="${slug}" class="rounded-full neo-tab px-[17px] py-[11px] text-[12px] lg:text-[14px] capitalize border border-[#ffffff07] neon-border backdrop-blur font-semibold text-slate-300 opacity-93 tracking-wide transition">${catRaw}</button>`;
+          return `<button role="tab" type="button" data-skilltab="${slug}" class="rounded-full neo-tab px-3 py-2 sm:px-[17px] sm:py-[11px] text-[11px] sm:text-[12px] lg:text-[14px] capitalize border border-[#ffffff07] neon-border backdrop-blur font-semibold text-slate-300 opacity-93 tracking-wide transition max-w-full">${catRaw}</button>`;
         })
         .join("");
 
@@ -285,11 +283,11 @@
           wrap.dataset.aos = `fade-up`;
           wrap.dataset.aosDuration = ``;
           wrap.className =
-            "tilt-card glass neon-border rounded-[29px] p-10 lg:p-[44px_28px_32px_28px] flex flex-col items-center transition-all duration-450 hover:border-neon-purple/60 neon-border-soft";
-          const badge = `<div class=\"flex h-[80px] w-[80px] items-center mx-auto neon-border neon-border-strong mb-11 justify-center particle-line rounded-[22px] border border-[#fff2]/20 backdrop-blur-[8px]\"><i class=\"${sk.icon} text-[43px]\"></i></div>`;
+            "tilt-card glass neon-border rounded-[22px] sm:rounded-[26px] p-5 sm:p-8 lg:p-[44px_28px_32px_28px] flex flex-col items-center transition-all duration-450 hover:border-neon-purple/60 neon-border-soft min-w-0";
+          const badge = `<div class=\"flex h-[64px] w-[64px] sm:h-[80px] sm:w-[80px] items-center mx-auto neon-border neon-border-strong mb-7 sm:mb-11 justify-center particle-line rounded-[18px] sm:rounded-[22px] border border-[#fff2]/20 backdrop-blur-[8px]\"><i class=\"${sk.icon} text-[34px] sm:text-[43px]\"></i></div>`;
           wrap.innerHTML = `
             ${badge}
-            <h4 class=\"font-semibold text-[21px]\">${escapeHTML(sk.name)}</h4>
+            <h4 class=\"font-semibold text-[17px] sm:text-[21px] text-center leading-snug\">${escapeHTML(sk.name)}</h4>
             <div class=\"particle-line neon-border-soft !mt-13 h-[9px] w-full bg-[rgba(255,255,255,0.04)] neon-border-strong rounded-xl overflow-hidden\">
               <div class=\"skills-bar-particle h-[9px] bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan neon-border-strong rounded-xl\" style=\"width: ${sk.level}%\"></div>
             </div>
@@ -307,7 +305,7 @@
           wrap.querySelector("i:first-of-type").style.backgroundClip = "text";
         });
 
-        if (typeof VanillaTilt !== "undefined") {
+        if (typeof VanillaTilt !== "undefined" && window.matchMedia("(min-width: 768px) and (hover: hover)").matches) {
           VanillaTilt.init(grid.querySelectorAll(".tilt-card"), { glare: true, scale: "1.04", gyroscope: false, max: 27 });
         }
       };
@@ -351,7 +349,7 @@
         slide.className = "swiper-slide !h-auto p-3 sm:p-4";
         slide.innerHTML = `
           <article data-tilt data-tilt-max="18" data-tilt-glare="true" data-tilt-scale="1.02"
-            class="tilt-card project-card neon-border glass group flex h-full flex-col overflow-hidden rounded-3xl shadow-xl shadow-purple-950/35">
+            class="tilt-card project-card neon-border glass group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl shadow-purple-950/35 touch-manipulation">
             <div class="relative aspect-[16/10] overflow-hidden border-b border-white/10 bg-slate-950/55">
               <img src="${escapeHTML(pj.image)}" alt="${escapeHTML(pj.imageAlt)}"
                    class="h-full w-full object-cover transition duration-[1.1s] ease-out group-hover:scale-[1.05]"
@@ -364,7 +362,7 @@
                 </button>
               </div>
             </div>
-            <div class="flex flex-1 flex-col gap-[18px] p-6 md:p-8">
+            <div class="flex flex-1 min-w-0 flex-col gap-4 sm:gap-[18px] p-4 sm:p-6 md:p-8">
               <div class="flex flex-wrap items-center justify-between gap-3">
                 <span class="rounded-full px-5 py-[5px] text-[11px] font-semibold uppercase tracking-[0.18em] text-neon-cyan neon-border bg-white/[4%]">
                   ${escapeHTML(pj.category)}
@@ -406,13 +404,14 @@
       if (typeof Swiper !== "undefined") {
         window.__portfolioSwiper = new Swiper(".project-swiper", {
           slidesPerView: 1,
-          spaceBetween: 16,
+          spaceBetween: 12,
           loop: portfolioData.projects.length > 2,
           pagination: { el: ".swiper-pagination", clickable: true },
           navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
           grabCursor: true,
           breakpoints: {
-            768: { slidesPerView: 1.85, centeredSlides: false },
+            480: { spaceBetween: 16 },
+            768: { slidesPerView: 1.65, spaceBetween: 20, centeredSlides: false },
             1280: {
               slidesPerView: portfolioData.projects.length >= 3 ? 3 : portfolioData.projects.length,
               centeredSlides: false,
@@ -422,6 +421,7 @@
       }
 
       typeof VanillaTilt !== "undefined" &&
+        window.matchMedia("(min-width: 768px) and (hover: hover)").matches &&
         VanillaTilt.init(wrap.querySelectorAll(".project-card"), {
           glare: true,
           max: 22,
@@ -510,8 +510,15 @@
 
       backdrop.classList.remove("opacity-0", "pointer-events-none");
       backdrop.classList.add("opacity-100", "pointer-events-auto");
-      pane.classList.remove("translate-x-24", "scale-[0.965]", "opacity-95");
-      pane.classList.add("translate-x-0", "scale-100", "opacity-100");
+      pane.classList.remove(
+        "translate-y-6",
+        "translate-x-0",
+        "md:translate-y-0",
+        "md:translate-x-24",
+        "scale-[0.965]",
+        "opacity-95",
+      );
+      pane.classList.add("translate-x-0", "translate-y-0", "scale-100", "opacity-100");
       backdrop.setAttribute("aria-hidden", "false");
       pane.setAttribute("aria-hidden", "false");
     }
@@ -523,8 +530,15 @@
       /** Remove open-state utilities or Tailwind can keep e.g. opacity-100 winning over opacity-0 */
       backdrop.classList.remove("opacity-100", "pointer-events-auto");
       backdrop.classList.add("opacity-0", "pointer-events-none");
-      pane.classList.remove("translate-x-0", "scale-100", "opacity-100");
-      pane.classList.add("translate-x-24", "scale-[0.965]", "opacity-95");
+      pane.classList.remove("translate-x-0", "translate-y-0", "scale-100", "opacity-100");
+      pane.classList.add(
+        "translate-y-6",
+        "translate-x-0",
+        "md:translate-y-0",
+        "md:translate-x-24",
+        "scale-[0.965]",
+        "opacity-95",
+      );
       backdrop.setAttribute("aria-hidden", "true");
       pane.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
@@ -544,7 +558,7 @@
           (job, idx) => `
         <article class="relative pb-14" ${idx % 2 === 0 ? `data-aos="fade-left"` : `data-aos="fade-right"`} data-aos-duration="740" data-aos-once="true">
           <span class="absolute left-[2px] top-10 z-[30] h-3 w-3 rounded-full bg-gradient-to-br from-neon-purple via-neon-pink to-neon-cyan shadow-[0_0_26px_rgba(168,85,247,.72)] sm:left-[-76px] sm:top-[32px] sm:h-[15px] sm:w-[15px] sm:border sm:border-purple-400/55 sm:bg-[radial-gradient(circle,#a855f794_0,#06b6d499_139%)]"></span>
-          <div class="neon-border glass-strong tilt-card-exp relative ml-[6px] max-w-xl rounded-3xl p-10 sm:ml-2 sm:inline-block sm:p-12 shadow-2xl shadow-black/60 ${idx % 2 ? "ml-auto mr-2 sm:-translate-x-[10%]" : ""}">
+          <div class="neon-border glass-strong tilt-card-exp relative ml-0 max-w-none sm:max-w-xl rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-12 sm:ml-[6px] sm:inline-block shadow-2xl shadow-black/60 ${idx % 2 ? "sm:ml-auto sm:mr-2 sm:-translate-x-[10%]" : ""}">
             <header class="space-y-[3px]">
               <p class="bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text font-display text-xl font-semibold tracking-tight text-transparent">${escapeHTML(job.role)}</p>
               <p class="text-lg font-semibold text-slate-100">${escapeHTML(job.company)}</p>
@@ -562,6 +576,7 @@
       typeof AOS !== "undefined" && AOS.refresh();
 
       typeof VanillaTilt !== "undefined" &&
+        window.matchMedia("(min-width: 768px) and (hover: hover)").matches &&
         VanillaTilt.init(root.querySelectorAll(".tilt-card-exp"), {
           glare: true,
           max: 14,
@@ -619,7 +634,7 @@
         .map(
           (r) => `
         <a href="${escapeHTML(r.href)}" target="${r.target}" ${r.target !== "_self" ? `rel="noopener noreferrer"` : ""}
-           class="glass neon-border group flex items-start gap-[18px] rounded-3xl px-8 py-5 transition hover:bg-white/[0.05]">
+           class="glass neon-border group flex items-start gap-3 sm:gap-[18px] rounded-2xl sm:rounded-3xl px-4 py-4 sm:px-8 sm:py-5 transition hover:bg-white/[0.05] min-w-0">
            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#FFFFFF16] neon-border bg-white/[5%]">
              <i class="${r.icon}"></i>
            </span>
@@ -691,23 +706,24 @@
 
     function initParticlesHero() {
       if (typeof particlesJS === "undefined") return;
+      const narrow = window.matchMedia("(max-width: 639px)").matches;
       particlesJS("particles-js", {
         particles: {
-          number: { value: 64, density: { enable: true, value_area: 720 } },
+          number: { value: narrow ? 28 : 64, density: { enable: true, value_area: narrow ? 1100 : 720 } },
           color: { value: "#a855f7" },
           shape: { type: "circle" },
-          opacity: { value: 0.45, random: true },
-          size: { value: 2.2, random: true },
+          opacity: { value: narrow ? 0.38 : 0.45, random: true },
+          size: { value: narrow ? 2 : 2.2, random: true },
           line_linked: {
             enable: true,
-            distance: 150,
+            distance: narrow ? 110 : 150,
             color: "#06b6d4",
-            opacity: 0.22,
+            opacity: narrow ? 0.16 : 0.22,
             width: 1,
           },
           move: {
             enable: true,
-            speed: 1.1,
+            speed: narrow ? 0.75 : 1.1,
             direction: "none",
             random: true,
             out_mode: "out",
@@ -967,7 +983,8 @@
         "touchstart",
         (e) => {
           if (!lb.classList.contains("opacity-100")) return;
-          touchStartX = e.changedTouches[0].clientX;
+          const t = e.touches && e.touches[0];
+          touchStartX = t ? t.clientX : null;
         },
         { passive: true },
       );
@@ -984,14 +1001,70 @@
         { passive: true },
       );
 
+      const modalContent = document.getElementById("modalContent");
+      if (modalContent) {
+        let tap = null;
+
+        const projectModalIsOpen = () => {
+          const bd = document.getElementById("projectModalBackdrop");
+          return !!(bd && bd.classList.contains("pointer-events-auto"));
+        };
+
+        const imgFromEvent = (ev) => {
+          const n = ev.target;
+          if (!n || typeof n.closest !== "function") return null;
+          const img = n.closest("img");
+          return img && modalContent.contains(img) ? img : null;
+        };
+
+        modalContent.addEventListener("pointerdown", (e) => {
+          if (!projectModalIsOpen()) {
+            tap = null;
+            return;
+          }
+          if (e.pointerType === "mouse" && e.button !== 0) return;
+          const img = imgFromEvent(e);
+          tap = img ? { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now(), img } : null;
+        });
+
+        modalContent.addEventListener("pointerup", (e) => {
+          if (!tap || e.pointerId !== tap.id) return;
+          if (!projectModalIsOpen()) {
+            tap = null;
+            return;
+          }
+          const img = imgFromEvent(e);
+          if (img !== tap.img) {
+            tap = null;
+            return;
+          }
+          const dx = e.clientX - tap.x;
+          const dy = e.clientY - tap.y;
+          const dt = performance.now() - tap.t;
+          tap = null;
+          if (dt > 900 || Math.abs(dx) > 24 || Math.abs(dy) > 24) return;
+          const src = img.currentSrc || img.src;
+          if (src) screenshotLightboxOpenAtSlide(src);
+        });
+
+        modalContent.addEventListener("pointercancel", () => {
+          tap = null;
+        });
+      }
+
       document.addEventListener("click", (e) => {
-        const t = e.target;
-        if (!(t instanceof HTMLImageElement)) return;
-        const modalContent = document.getElementById("modalContent");
-        if (!modalContent || !modalContent.contains(t)) return;
-        const src = t.currentSrc || t.src;
-        if (!src) return;
-        screenshotLightboxOpenAtSlide(src);
+        if (!window.PointerEvent) {
+          const t = e.target;
+          if (!t || typeof t.closest !== "function") return;
+          const img = t.closest("img");
+          if (!img) return;
+          const mc = document.getElementById("modalContent");
+          if (!mc || !mc.contains(img)) return;
+          const bd = document.getElementById("projectModalBackdrop");
+          if (!bd || !bd.classList.contains("pointer-events-auto")) return;
+          const src = img.currentSrc || img.src;
+          if (src) screenshotLightboxOpenAtSlide(src);
+        }
       });
     }
 
@@ -1018,28 +1091,6 @@
         if (!b || !b.classList.contains("opacity-100")) return;
         closeProjectModal();
       });
-    }
-
-    function initThemeToggle() {
-      const root = document.documentElement;
-      const btn = document.getElementById("themeToggle");
-      const sun = document.getElementById("themeIconSun");
-      const moon = document.getElementById("themeIconMoon");
-      if (!btn) return;
-
-      const apply = (dark) => {
-        root.classList.toggle("dark", dark);
-        localStorage.setItem(THEME_LS_KEY, dark ? "1" : "0");
-        if (sun && moon) {
-          sun.classList.toggle("opacity-0", dark);
-          sun.classList.toggle("scale-75", dark);
-          moon.classList.toggle("opacity-0", !dark);
-          moon.classList.toggle("scale-75", !dark);
-        }
-      };
-
-      apply(localStorage.getItem(THEME_LS_KEY) !== "0");
-      btn.addEventListener("click", () => apply(!root.classList.contains("dark")));
     }
 
     function observeStatsCounters() {
@@ -1087,6 +1138,7 @@
 
     function initStatsTilt() {
       typeof VanillaTilt !== "undefined" &&
+        window.matchMedia("(min-width: 768px) and (hover: hover)").matches &&
         VanillaTilt.init(document.querySelectorAll("#statsCards .tilt-card-stats"), {
           glare: true,
           max: 18,
@@ -1162,10 +1214,6 @@
       initNavScrollHide();
       initActiveNavSections();
 
-
-
-      /** */
-      initThemeToggle();
 
     };
 
