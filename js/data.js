@@ -77,11 +77,25 @@ window.PORTFOLIO_DATA = {
         'Multi-branch car dealership management system tracking vehicle stock and financial records. Auto-generates sales reports, supports currency conversion, and syncs inventory across all branches.',
       tech: ['Next.js', 'MongoDB', 'React.js'],
       links: {
-        github: 'https://github.com/abdul-hannan-SE',
+        github: 'https://github.com/abdul-hannan-SE/hisab',
         live: '',
       },
-      image: 'assets/hisab/01-dashboard-home.png',
+      image: 'assets/hisab/main-dashboard.png',
       imageHint: 'hisab-nafay.png',
+    },
+    {
+      slug: 'ns-forwarding-operations',
+      title: 'NS Forwarding Operations Platform',
+      category: 'Backend',
+      description:
+        'Forwarding operations hub for a Japanese company: master/house shipments, BLs, client statements, invoices, and automated upcoming shipment reports.',
+      tech: ['Node.js', 'Express.js', 'MongoDB', 'AWS'],
+      links: {
+        github: 'https://github.com/abdul-hannan-SE/nsforwarding',
+        live: '',
+      },
+      image: 'assets/nsforwarding/dashboard with stats.png',
+      imageHint: 'ns-forwarding.png',
     },
   ],
   skills: [

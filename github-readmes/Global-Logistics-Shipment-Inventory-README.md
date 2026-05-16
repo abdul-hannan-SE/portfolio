@@ -1,127 +1,177 @@
-# Global Logistics Shipment Inventory
+# Global Logistics — Shipment Inventory Platform
 
-Admin portal and APIs for managing vehicle shipments from yards through vessels to ports. Built for high-volume logistics operations with role-based admin tools, bulk workflows, analytics, and AWS-backed photo storage.
+**Track vehicles from storage yard to vessel to port — with photos, customers, and analytics in one admin platform.**
 
-**Repository:** [github.com/abdul-hannan-SE/global_logistics_inventory](https://github.com/abdul-hannan-SE/global_logistics_inventory)
+Built for **high-volume vehicle forwarding and logistics** (e.g. Japanese export operations) where teams need reliable shipment records, bulk updates, and customer visibility — not another overloaded spreadsheet.
 
-**Screenshots folder:** [github.com/abdul-hannan-SE/global_logistics_inventory/tree/main/sreenshots](https://github.com/abdul-hannan-SE/global_logistics_inventory/tree/main/sreenshots)
+**Live project:** [github.com/abdul-hannan-SE/global_logistics_inventory](https://github.com/abdul-hannan-SE/global_logistics_inventory)
 
-> The directory is named `sreenshots` in the repo (typo). Images in this README use paths relative to the repository root so they render on GitHub after you copy this file to `README.md`. If you rename the folder to `screenshots`, update every `./sreenshots/` path below.
+### Copy for LinkedIn (short post)
 
----
+> **Global Logistics Shipment Inventory** — a platform I built for high-volume vehicle forwarding: track shipments yard → vessel → port, bulk updates, cloud photos, analytics, and a customer portal so clients see their own cargo without endless emails. Overview + screenshots on GitHub: https://github.com/abdul-hannan-SE/global_logistics_inventory  
+> #Backend #Logistics #SaaS #NodeJS #Portfolio
 
-## Features
-
-- **Shipments** — Filter by date, job number, chassis, vessel, POD, customer, yard, and status; add records; export; row actions; photo counts tied to storage.
-- **Bulk workflows** — Multi-select for assign vessel, gate out / status, bulk photo download, and related batch actions.
-- **Vessels** — Vessel records with job numbers, shipping lines, ETD, POD, and maintenance of large vessel lists.
-- **Customers** — Admin customer directory, credentials, and search.
-- **Analytics** — Overview metrics and deeper analytics views (including gate-style reporting where enabled).
-- **Customer portal** — Customer-facing dashboard (search, filters, export) for their own shipment visibility.
-- **Photo management** — Per-shipment galleries with upload limits and AWS-backed media.
-- **Authentication** — Login and session flows for admin and customer roles.
-- **Migration** — Data migration utilities where exposed in the admin UI.
+*Attach key screenshots (shipments, customer dashboard, analytics) or link to the repo.*
 
 ---
 
-## Tech stack
+## At a glance
 
-| Layer     | Technologies                        |
-| --------- | ------------------------------------- |
-| Runtime   | Node.js                               |
-| API       | Express.js, REST                      |
-| Database  | MongoDB                               |
-| Media     | AWS (e.g. S3)                         |
-| Admin UI  | React (adjust to match your codebase) |
-| Deploy    | Vercel or your host                   |
+| | |
+| --- | --- |
+| **What it is** | An operations platform for staff (and customers) to see, update, and report on vehicle shipments end to end. |
+| **Who it helps** | Logistics admins, operations teams, customer service, and clients who need their own shipment view. |
+| **Why it exists** | Thousands of shipments, photos, and status changes are hard to manage safely in Excel — this system is built for that scale. |
 
 ---
 
-## Getting started
+## The problem it solves
 
-```bash
-git clone https://github.com/abdul-hannan-SE/global_logistics_inventory.git
-cd global_logistics_inventory
-npm install
-```
+Forwarding and yard operations typically struggle with:
 
-Create a `.env` (or `.env.local`) with your real values, for example:
+- Shipment lists that are hard to filter and export when volume spikes  
+- Photos scattered across drives, emails, and ad-hoc folders  
+- Vessel and customer data living in different tools  
+- Customers calling for updates because they have no self-service view  
+- Bulk changes (assign vessel, gate out, download photos) done row by row  
 
-```env
-MONGODB_URI=
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_REGION=
-AWS_S3_BUCKET=
-# JWT / session secrets, etc.
-```
-
-```bash
-npm run dev
-```
-
-Adjust scripts (`dev`, `build`, `start`) to match your `package.json`.
+This platform **centralizes shipments**, supports **batch actions**, stores **photos in the cloud**, and offers **analytics** plus a **customer portal** so everyone works from the same live data.
 
 ---
 
-## Screenshots
+## What you can do (no coding required)
 
-All images live under [`sreenshots/`](https://github.com/abdul-hannan-SE/global_logistics_inventory/tree/main/sreenshots) on the default branch.
+### Shipments hub  
+Search and filter by date, job number, chassis, vessel, port, customer, yard, status, and more. Add records, export data, and act on individual rows — including photo counts per shipment.
 
-| File | What it shows (high level) |
-| ---- | -------------------------- |
-| `shipments.png` | Shipments grid and primary admin list |
-| `02-shipments-bulk-download-photos.png` | Bulk selection and photo / download oriented workflow |
-| `05-vessels.png` | Numbered vessel export / sample vessel UI |
-| `vessels.png` | Vessel management table |
-| `customer.png` | Customer admin listing |
-| `customer dashboard.png` | Customer-facing dashboard |
-| `analytics.png` | Analytics overview |
-| `analytics-1.png` | Additional analytics / charts view |
-| `photos aws.png` | Photo management with cloud storage context |
-| `login.png` | Sign-in screen |
+### Bulk operations  
+Select many shipments at once: assign vessels, update gate/status, download photos in bulk, and other batch workflows that save hours on busy days.
 
-Preview (paths are relative to repo root; same layout as on [GitHub](https://github.com/abdul-hannan-SE/global_logistics_inventory/tree/main/sreenshots)):
+### Vessels  
+Maintain vessel schedules and details — job numbers, lines, sailing dates, ports — in one place.
+
+### Customers (admin)  
+Manage customer accounts and access so the right clients see the right shipments.
+
+### Analytics  
+Dashboards for operational overview and deeper reporting (including gate-style movement insights where enabled).
+
+### Customer portal  
+Customers sign in to **their own dashboard**: search, filter, and export **their** shipments without calling operations for every update.
+
+### Photo management  
+Attach and manage shipment photos with cloud storage — structured galleries instead of lost attachments.
+
+### Secure access  
+Separate login experiences for **admin staff** and **customers**, so internal tools stay internal.
+
+---
+
+## See it in action
+
+Screenshots below show real screens from the platform.  
+(Full gallery: [sreenshots folder on GitHub](https://github.com/abdul-hannan-SE/global_logistics_inventory/tree/main/sreenshots) — folder name is `sreenshots` in the repo today.)
+
+### Shipments — main operations list  
+The core grid: find any shipment quickly and work from one screen.
 
 ![Shipments](./sreenshots/shipments.png)
 
+### Bulk selection & photo download  
+Handle many shipments together — including photo-related bulk work.
+
 ![Bulk shipments & photos](./sreenshots/02-shipments-bulk-download-photos.png)
 
-![Vessels (05)](./sreenshots/05-vessels.png)
+### Vessels (sample / export view)  
+Vessel-related listing and export-style UI.
+
+![Vessels sample](./sreenshots/05-vessels.png)
+
+### Vessels management  
+Maintain the vessel catalog operations rely on.
 
 ![Vessels](./sreenshots/vessels.png)
 
+### Customers (admin)  
+Internal customer directory and administration.
+
 ![Customers](./sreenshots/customer.png)
+
+### Customer dashboard  
+What clients see when they log in — their shipments, their filters, their exports.
 
 ![Customer dashboard](./sreenshots/customer%20dashboard.png)
 
+### Analytics overview  
+High-level operational metrics.
+
 ![Analytics](./sreenshots/analytics.png)
 
-![Analytics (alternate)](./sreenshots/analytics-1.png)
+### Analytics (detail)  
+Additional charts and reporting views.
 
-![Photos & AWS](./sreenshots/photos%20aws.png)
+![Analytics detail](./sreenshots/analytics-1.png)
+
+### Photos & cloud storage  
+Shipment media managed with cloud-backed storage.
+
+![Photos](./sreenshots/photos%20aws.png)
+
+### Sign in  
+Secure entry for staff and customer roles.
 
 ![Login](./sreenshots/login.png)
 
 ---
 
-## API overview
+## Outcomes for the business
 
-Document your real routes here. Examples:
-
-- `GET/POST /api/shipments` — list, create, filters  
-- `PATCH /api/shipments/bulk` — bulk operations  
-- `GET/POST /api/vessels`, `/api/customers`  
-- `GET /api/analytics/...`  
-
----
-
-## License
-
-Proprietary / MIT / other — **you choose** and update this section.
+- **Fewer status errors** when updating many shipments at once  
+- **Faster customer service** with a self-service portal  
+- **Audit-friendly photo history** tied to each shipment  
+- **Operational visibility** through analytics instead of manual reports  
+- **Scale** for high-volume yard-to-port workflows  
 
 ---
 
-## Author
+## Built by
 
-**Abdul Hannan** — Backend & full-stack development.
+**Abdul Hannan** — Backend & full-stack developer  
+Portfolio: *[add your portfolio URL]*  
+LinkedIn: *[add your LinkedIn URL]*  
+
+Building logistics, inventory, or operations tools? Connect on LinkedIn or via my portfolio.
+
+---
+
+<details>
+<summary><strong>For developers</strong> (technical details)</summary>
+
+### Tech stack
+
+| Area | Tools |
+| --- | --- |
+| API | Node.js, Express.js, REST |
+| Data | MongoDB |
+| Media | AWS (e.g. S3) |
+| Admin UI | React |
+| Deploy | Vercel or your host |
+
+### Repository setup
+
+```bash
+git clone https://github.com/abdul-hannan-SE/global_logistics_inventory.git
+cd global_logistics_inventory
+npm install
+npm run dev
+```
+
+Set `.env` values for database, AWS credentials, and auth/session secrets before production deploy.
+
+### Screenshot folder
+
+Images live under `./sreenshots/` on the default branch. If you rename the folder to `screenshots`, update paths in this README.
+
+> **GitHub:** Copy this file to the repository root as `README.md`.
+
+</details>

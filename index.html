@@ -26,12 +26,14 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Poppins:wght@400..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
 
   <!-- CDN styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" media="print" onload="this.media='all'" referrerpolicy="no-referrer" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" /></noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /></noscript>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -71,10 +73,9 @@
   <!-- Vendor libraries (defer: parse order). Alpine.js MUST load last so Swiper/Typed/etc. exist before x-init. -->
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" referrerpolicy="no-referrer"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" referrerpolicy="no-referrer"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" referrerpolicy="no-referrer"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.8.0/countUp.umd.js" referrerpolicy="no-referrer"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js" referrerpolicy="no-referrer"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" data-portfolio-effects="particles"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/lib/typed.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -173,14 +174,14 @@
     <!-- HERO -->
     <section id="home" data-section-marker="home" class="relative min-h-[100dvh] min-h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden pt-28 pb-28 sm:pt-36 sm:pb-20 md:pb-28">
       <div class="absolute inset-0 pointer-events-none -z-[1] particle-line bg-[linear-gradient(rgba(15,23,42,0.65),transparent)]"></div>
-      <div class="particles-bg absolute inset-0 -z-[1] opacity-95">
+      <div class="particles-bg absolute inset-0 -z-[1] opacity-95 hidden lg:block">
         <div id="particles-js" aria-hidden="true"></div>
       </div>
 
       <!-- Floating blobs -->
-      <div class="floating-blob pointer-events-none absolute -top-[10vmax] left-[-14vmax] w-[clamp(340px,40vw,480px)] h-[clamp(340px,40vw,480px)] rounded-full bg-gradient-to-tr from-[#a855f7]/45 via-transparent to-transparent blur-[100px]" style="animation: gradient-wave 28s infinite linear alternate-reverse;"></div>
-      <div class="floating-blob pointer-events-none absolute bottom-[-20vmax] right-[-10vmax] w-[clamp(300px,45vw,520px)] h-[clamp(280px,40vw,500px)] rounded-full bg-gradient-to-tl from-[#06b6d4]/25 via-transparent to-[#ec4899]/35 blur-[120px]" style="animation: gradient-wave 32s infinite linear;"></div>
-      <div class="floating-blob particle-dot pointer-events-none absolute top-[52%] right-[33%] w-72 h-72 rounded-full opacity-40 blur-3xl bg-neon-lime/12"></div>
+      <div class="floating-blob pointer-events-none absolute -top-[10vmax] left-[-14vmax] hidden md:block w-[clamp(340px,40vw,480px)] h-[clamp(340px,40vw,480px)] rounded-full bg-gradient-to-tr from-[#a855f7]/45 via-transparent to-transparent blur-[100px]" style="animation: gradient-wave 28s infinite linear alternate-reverse;"></div>
+      <div class="floating-blob pointer-events-none absolute bottom-[-20vmax] right-[-10vmax] hidden md:block w-[clamp(300px,45vw,520px)] h-[clamp(280px,40vw,500px)] rounded-full bg-gradient-to-tl from-[#06b6d4]/25 via-transparent to-[#ec4899]/35 blur-[120px]" style="animation: gradient-wave 32s infinite linear;"></div>
+      <div class="floating-blob particle-dot pointer-events-none absolute top-[52%] right-[33%] hidden md:block w-72 h-72 rounded-full opacity-40 blur-3xl bg-neon-lime/12"></div>
 
       <div class="relative mx-auto flex w-full min-w-0 max-w-5xl flex-col items-center lg:items-start text-center lg:text-left gap-y-8 sm:gap-y-11">
         <div class="w-full min-w-0 space-y-3 sm:space-y-4 max-w-xl lg:max-w-2xl" data-aos="fade-down" data-aos-duration="800" data-aos-once="true">

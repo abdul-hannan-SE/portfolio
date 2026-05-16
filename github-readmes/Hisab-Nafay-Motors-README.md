@@ -1,114 +1,164 @@
-# Hisab Nafay Motors
+# Hisab — Dealership Management System
 
-**Hisab** (حساب — *accounting / ledger*) — multi-branch dealership management for vehicle stock, sales, expenses, and financial reporting. Replaces fragmented spreadsheets with one operational system.
+**One place to run stock, sales, expenses, and accounts across multiple branches.**
 
-> **Using this README on GitHub:** copy this file to your repository root as `README.md`. Add screenshots under `docs/screenshots/` (same filenames as below) or change paths to match your repo.
+Built for **Nafay Motors** and similar multi-location car dealerships that used to rely on separate spreadsheets, WhatsApp updates, and manual ledgers.
 
----
+**Live project:** [github.com/abdul-hannan-SE/hisab](https://github.com/abdul-hannan-SE/hisab)
 
-## Features
+### Copy for LinkedIn (short post)
 
-- **Multi-branch inventory** — Stock levels and vehicle units synced across branches.
-- **Sales** — Sales flows, reporting, and revenue visibility.
-- **Expenses** — Operational expense tracking.
-- **Accounts & ledger** — Financial records and ledger-style views.
-- **Terminal** — Operational terminal / quick-entry style workflows (adjust wording to match your app).
-- **Currency** — Multi-currency or conversion support where configured.
-- **Dashboard** — Unified home view for KPIs and daily operations.
+> I built **Hisab** — a dealership management app for multi-branch car businesses. One system for stock, sales, expenses, and accounts instead of scattered spreadsheets. Screenshots and overview on GitHub (no code needed to understand what it does): https://github.com/abdul-hannan-SE/hisab  
+> #FullStack #WebApp #Dealership #Inventory #Portfolio
+
+*Attach 2–4 screenshots from the gallery below, or link to the repo.*
 
 ---
 
-## Tech stack
+## At a glance
 
-| Layer     | Technologies                    |
-| --------- | ------------------------------- |
-| Framework | Next.js                         |
-| UI        | React, Tailwind CSS             |
-| Database  | MongoDB                         |
-| Auth      | *(document your auth approach)* |
-| Deploy    | Vercel or your host             |
+| | |
+| --- | --- |
+| **What it is** | A web app that keeps inventory, sales, spending, and financial records in sync for every branch. |
+| **Who it helps** | Owners, managers, sales staff, and finance — anyone who needs the same numbers without chasing files. |
+| **Why it exists** | Fewer mistakes, faster reporting, and clear visibility when vehicles move between yards and money moves between accounts. |
 
 ---
 
-## Getting started
+## The problem it solves
+
+Dealerships often juggle:
+
+- Stock lists that don’t match what’s on the lot  
+- Sales recorded in one place and expenses in another  
+- Branch managers working from different versions of the truth  
+- Month-end reporting that takes days of copy-paste  
+
+**Hisab** (حساب — *accounts / ledger*) brings daily operations into **one system**: see what you have, what you sold, what you spent, and what the books say — without opening five different files.
+
+---
+
+## What you can do (no coding required)
+
+### Main dashboard  
+Start the day with a clear picture: how the business is performing and what needs attention across branches.
+
+### Terminal  
+Quick, practical screen for everyday dealership tasks — built for staff who need speed, not complexity.
+
+### Stock  
+See which vehicles are in stock, where they are, and how inventory looks branch by branch.
+
+### Stock details  
+Open any vehicle for full unit information — useful when sales, finance, and the yard all need the same facts.
+
+### Sales  
+Record and review sales activity with reporting that supports revenue visibility.
+
+### Expenses  
+Track operational spending so costs sit alongside sales, not in a forgotten folder.
+
+### Accounts & statements  
+View financial accounts and statements in a structured way — closer to how finance teams actually work.
+
+### Settings  
+Configure branches, currency, and other business rules in one admin area.
+
+---
+
+## See it in action
+
+Screenshots below show real screens from the app.  
+(Full gallery: [screenshots folder on GitHub](https://github.com/abdul-hannan-SE/hisab/tree/main/screenshots))
+
+### Main dashboard  
+Overview for owners and managers — KPIs and daily operations in one home screen.
+
+![Main dashboard](./screenshots/main-dashboard.png)
+
+### Terminal  
+Fast workflow screen for day-to-day dealership operations.
+
+![Terminal](./screenshots/terminal.png)
+
+### Stock  
+Branch inventory at a glance.
+
+![Stock](./screenshots/stock.png)
+
+### Stock details  
+Deep view on a single vehicle / unit.
+
+![Stock details](./screenshots/stock-details.png)
+
+### Sales  
+Sales desk and sales-related reporting.
+
+![Sales](./screenshots/sales.png)
+
+### Expenses  
+Expense tracking for the business.
+
+![Expenses](./screenshots/expenses.png)
+
+### Accounts & statement  
+Accounts with statement-style financial views.
+
+![Accounts & statement](./screenshots/accounts_with_statement.png)
+
+### Settings  
+System and branch configuration.
+
+![Settings](./screenshots/settings.png)
+
+---
+
+## Outcomes for the business
+
+- **One source of truth** for stock and money across branches  
+- **Less manual reconciliation** between spreadsheets and staff  
+- **Faster answers** to “what do we have?” and “how did we perform?”  
+- **Better handoff** between yard, sales, and finance using the same data  
+
+---
+
+## Built by
+
+**Abdul Hannan** — Backend & full-stack developer  
+Portfolio: *[add your portfolio URL]*  
+LinkedIn: *[add your LinkedIn URL]*  
+
+Interested in a similar system for your dealership or business? Reach out via LinkedIn or the contact on my portfolio.
+
+---
+
+<details>
+<summary><strong>For developers</strong> (technical details)</summary>
+
+### Tech stack
+
+| Area | Tools |
+| --- | --- |
+| App | Next.js, React |
+| Styling | Tailwind CSS |
+| Data | MongoDB |
+| Hosting | Vercel (or your host) |
+
+### Repository setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-cd YOUR_REPO
+git clone https://github.com/abdul-hannan-SE/hisab.git
+cd hisab
 npm install
-```
-
-Environment (example — replace with your real variables):
-
-```env
-MONGODB_URI=
-NEXTAUTH_SECRET=
-NEXTAUTH_URL=
-# Add others your app requires
-```
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) (or your configured port).
+Configure environment variables (database URL, auth secrets, etc.) in `.env` before running in production.
 
----
+### Screenshot filenames (repo root)
 
-## Screenshots
+`screenshots/main-dashboard.png` · `terminal.png` · `stock.png` · `stock-details.png` · `sales.png` · `expenses.png` · `accounts_with_statement.png` · `settings.png`
 
-Suggested filenames (align with your portfolio `assets/hisab/` gallery):
+> **GitHub:** Copy this file to the repository root as `README.md` so images render from `./screenshots/`.
 
-| File | Area |
-| ---- | ---- |
-| `01-dashboard-home.png` | Dashboard home |
-| `02-terminal.png` | Terminal |
-| `03-stock.png` | Stock |
-| `04-sales.png` | Sales |
-| `05-expenses.png` | Expenses |
-| `06-accounts-ledger.png` | Accounts ledger |
-| `07-vehicle-unit.png` | Vehicle unit |
-
-Preview (renders after you add the files above):
-
-![Dashboard](docs/screenshots/01-dashboard-home.png)
-![Terminal](docs/screenshots/02-terminal.png)
-![Stock](docs/screenshots/03-stock.png)
-![Sales](docs/screenshots/04-sales.png)
-![Expenses](docs/screenshots/05-expenses.png)
-![Accounts ledger](docs/screenshots/06-accounts-ledger.png)
-![Vehicle unit](docs/screenshots/07-vehicle-unit.png)
-
----
-
-## Scripts
-
-| Command        | Description        |
-| -------------- | ------------------ |
-| `npm run dev`  | Development server |
-| `npm run build`| Production build   |
-| `npm run start`| Production server  |
-| `npm run lint` | Lint (if configured)|
-
----
-
-## Deployment
-
-Typical flow for Vercel:
-
-1. Connect the GitHub repository to Vercel.  
-2. Set production environment variables to match `.env`.  
-3. Deploy; verify MongoDB IP allowlist / Atlas network access.
-
----
-
-## License
-
-Proprietary / MIT / other — **you choose** and update this section.
-
----
-
-## Author
-
-**Abdul Hannan** — Backend & full-stack development.  
-Portfolio: [link your portfolio when ready]
+</details>

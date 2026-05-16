@@ -195,3 +195,48 @@
   box-shadow: 0 8px 32px rgba(168, 85, 247, 0.52);
   height: 2px;
 }
+
+/* ─── Performance: mobile + lite mode (set by JS on touch / narrow viewports) ─── */
+@media (max-width: 767px) {
+  .glass,
+  .glass-strong {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .floating-blob {
+    animation: none !important;
+    opacity: 0.22 !important;
+  }
+
+  .noise:before {
+    display: none;
+  }
+
+  #scrollProgressWrap {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+html.portfolio-lite .floating-blob {
+  animation: none !important;
+}
+
+html.portfolio-lite .noise:before {
+  display: none;
+}
+
+/* Skill cards: never leave grid invisible when AOS CSS is loaded but init skipped */
+html.portfolio-lite #skillCardsGrid [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-blob,
+  .animate-bounce-slow,
+  .animate-pulse {
+    animation: none !important;
+  }
+}
