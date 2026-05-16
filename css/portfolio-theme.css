@@ -227,10 +227,56 @@ html.portfolio-lite .noise:before {
   display: none;
 }
 
+/* Tech stack tabs & cards — CSS-only motion (no AOS on tab switch) */
+.skill-tab-active {
+  color: #fff;
+  font-weight: 700;
+  border-color: rgba(168, 85, 247, 0.55);
+  background: linear-gradient(117deg, rgba(168, 85, 247, 0.55), rgba(236, 72, 153, 0.35), rgba(6, 182, 212, 0.22));
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+}
+
+#skillCardsGrid.skill-grid-swapping {
+  opacity: 0.72;
+  transition: opacity 0.1s ease;
+}
+
+@keyframes skill-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#skillCardsGrid .skill-card {
+  animation: skill-card-in 0.22s ease-out both;
+}
+
+html.portfolio-lite .glass,
+html.portfolio-lite .glass-strong {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html.portfolio-lite .neon-border:hover {
+  box-shadow: none;
+}
+
 /* Skill cards: never leave grid invisible when AOS CSS is loaded but init skipped */
-html.portfolio-lite #skillCardsGrid [data-aos] {
+html.portfolio-lite #skillCardsGrid [data-aos],
+#skillCardsGrid [data-aos] {
   opacity: 1 !important;
   transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #skillCardsGrid .skill-card {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

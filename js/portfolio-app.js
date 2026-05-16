@@ -18,22 +18,59 @@
       return !!(c && (c.saveData || /(?:^|[^a-z])2g/.test(String(c.effectiveType || ""))));
     }
 
-    function isCoarsePointer() {
-      return window.matchMedia("(pointer: coarse)").matches;
-    }
-
-    function isNarrowViewport() {
-      return window.matchMedia("(max-width: 767px)").matches;
-    }
-
-    /** Mobile / touch / save-data: skip particles, GSAP, AOS, tilt */
-    function useLiteExperience() {
-      return prefersReducedMotion() || prefersSaveData() || isCoarsePointer() || isNarrowViewport();
-    }
-
-    /** Desktop with hover: full visual effects */
+    /** Large desktop with hover only — keeps the site fast everywhere else */
     function useRichEffects() {
-      return !useLiteExperience() && window.matchMedia("(min-width: 1024px) and (hover: hover)").matches;
+      return (
+        !prefersReducedMotion() &&
+        !prefersSaveData() &&
+        window.matchMedia("(min-width: 1024px) and (hover: hover)").matches
+      );
+    }
+
+    /** Default: no AOS, particles, GSAP, or tilt */
+    function useLiteExperience() {
+      return prefersReducedMotion() || prefersSaveData() || !useRichEffects();
+    }
+
+    function loadScriptOnce(src) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector(`script[src="${src}"]`)) {
+          resolve();
+          return;
+        }
+        const s = document.createElement("script");
+        s.src = src;
+        s.defer = true;
+        s.crossOrigin = "anonymous";
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error(`Failed to load ${src}`));
+        document.head.appendChild(s);
+      });
+    }
+
+    function loadStylesheetOnce(href) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector(`link[href="${href}"]`)) {
+          resolve();
+          return;
+        }
+        const l = document.createElement("link");
+        l.rel = "stylesheet";
+        l.href = href;
+        l.onload = () => resolve();
+        l.onerror = () => reject(new Error(`Failed to load ${href}`));
+        document.head.appendChild(l);
+      });
+    }
+
+    async function loadRichVendors() {
+      await loadStylesheetOnce("https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css");
+      await Promise.all([
+        loadScriptOnce("https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"),
+        loadScriptOnce("https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"),
+        loadScriptOnce("https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"),
+        loadScriptOnce("https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"),
+      ]);
     }
 
     function runWhenIdle(fn, timeoutMs = 2200) {
@@ -242,77 +279,9 @@
       const grid = document.getElementById("skillCardsGrid");
       if (!tabs || !grid) return;
 
-      const aosSkills = typeof AOS !== "undefined" && !useLiteExperience();
-
-      /** categories */
       const categories = Object.keys(portfolioData.skills);
-      const tabSlug = {};
-
-      tabs.innerHTML = categories
-        .map((catRaw, ti) => {
-          const slug = catRaw.replace(/\s+/g, "").toLowerCase();
-          tabSlug[slug] = catRaw;
-          return `<button role="tab" type="button" data-skilltab="${slug}" class="rounded-full neo-tab px-3 py-2 sm:px-[17px] sm:py-[11px] text-[11px] sm:text-[12px] lg:text-[14px] capitalize border border-[#ffffff07] neon-border backdrop-blur font-semibold text-slate-300 opacity-93 tracking-wide transition max-w-full">${catRaw}</button>`;
-        })
-        .join("");
-
-      const paintGrid = (cat) => {
-        const key = catsMap(cat);
-        const list = portfolioData.skills[key] || [];
-        grid.innerHTML =
-          "" +
-          list
-            .map(
-              (
-                sk,
-              ) => `
-        <article class="tilt-card glass neon-border neon-border-rounded rounded-[22px] p-10 flex flex-col items-center tilt-card-effect group/sk">
-          <div class="particle-line relative flex h-[57px] w-[57px] items-center rounded-2xl border border-[#fff2] neon-border backdrop-blur justify-center mx-auto mb-7 group-hover/sk:shadow-xl">
-           <span class="text-transparent bg-gradient-to-tr from-[#a855f7] to-[#06b6d4] [-webkit-background-clip:text]"
-                 style="${sk.icon}">
-              </span>
-               <span class="" style="">
-                ${""}
-               </span>
-          </div>
-          <span class="mt-2 flex items-center mb-px font-semibold text-[17px]" style="">${sk.name}<span aria-hidden="" class="" style=""> </span></span>
-          <!-- progress -->
-          <div class="particle-line h-10 w-[90%] max-w-none rounded-full bg-transparent border border-transparent mt-auto flex items-center neon-border neon-border-soft">
-               <span class="-mt-4 text-[17px]" style="">${""}</span>
-          </div>
-        </article>
-      `,
-            )
-            .join("");
-        /** Rewrite cards properly */
-        grid.innerHTML = "";
-
-        /** Clean render */
-        list.forEach((sk) => {
-          const art = document.createElement("article");
-          art.className =
-            "tilt-card glass neon-border rounded-[26px] p-11 flex flex-col items-center hover:shadow-xl transition neon-border-soft group/sk";
-          const iconCircle = document.createElement("span");
-          iconCircle.className =
-            "particle-line neon-border backdrop-blur border border-[#fff2] h-[72px] w-[72px] mb-11 flex rounded-2xl items-center justify-center text-[33px]";
-          iconCircle.innerHTML = `<span class="${sk.icon.replace("fas", "fas")} [-webkit-background-clip:text]"
-          style=""> </span>`;
-          /** icon color */
-          const fa = iconCircle.firstElementChild;
-          fa.innerHTML = "";
-          fa.className = `${sk.icon} [-webkit-background-clip:text]`;
-
-          iconCircle.children[0].className =
-            sk.icon +
-            ` text-transparent bg-gradient-to-br from-[#a855f7] via-[#ec4899] to-[#06b6d4] bg-clip-text`;
-          iconCircle.children[0].style.webkitBackgroundClip = "text";
-          art.appendChild(iconCircle.cloneNode(false));
-          iconCircle.childNodes.forEach(() => {});
-        });
-      };
 
       const catsMap = (slugOrKey) => {
-        /** returns object key matching skills */
         if (portfolioData.skills[slugOrKey]) return slugOrKey;
         const lc = slugOrKey.toLowerCase().replace(/\s+/g, "");
         for (const k of Object.keys(portfolioData.skills)) {
@@ -321,93 +290,70 @@
         return slugOrKey;
       };
 
+      tabs.innerHTML = categories
+        .map((catRaw) => {
+          const slug = catRaw.replace(/\s+/g, "").toLowerCase();
+          return `<button role="tab" type="button" aria-selected="false" data-skilltab="${slug}" class="skill-tab neo-tab rounded-full px-3 py-2 sm:px-[17px] sm:py-[11px] text-[11px] sm:text-[12px] lg:text-[14px] capitalize border border-white/10 font-semibold text-slate-300 tracking-wide transition-colors max-w-full">${escapeHTML(catRaw)}</button>`;
+        })
+        .join("");
+
+      const setActiveTab = (activeBtn) => {
+        tabs.querySelectorAll("[data-skilltab]").forEach((b) => {
+          const on = b === activeBtn;
+          b.classList.toggle("skill-tab-active", on);
+          b.setAttribute("aria-selected", on ? "true" : "false");
+        });
+      };
+
       const paintSkills = (slug) => {
         const key = catsMap(slug);
         const list = portfolioData.skills[key] || [];
         grid.innerHTML = "";
         list.forEach((sk, idxSk) => {
           const wrap = document.createElement("article");
-          if (aosSkills) {
-            wrap.dataset.aos = "fade-up";
-            wrap.dataset.aosDelay = `${idxSk * 50}`;
-          }
           wrap.className =
-            "tilt-card glass neon-border rounded-[22px] sm:rounded-[26px] p-5 sm:p-8 lg:p-[44px_28px_32px_28px] flex flex-col items-center transition-all duration-450 hover:border-neon-purple/60 neon-border-soft min-w-0";
-          const badge = `<div class=\"flex h-[64px] w-[64px] sm:h-[80px] sm:w-[80px] items-center mx-auto neon-border neon-border-strong mb-7 sm:mb-11 justify-center particle-line rounded-[18px] sm:rounded-[22px] border border-[#fff2]/20 backdrop-blur-[8px]\"><i class=\"${sk.icon} text-[34px] sm:text-[43px]\"></i></div>`;
+            "skill-card glass neon-border rounded-2xl p-5 sm:p-6 flex flex-col items-center transition-[border-color,box-shadow] duration-200 hover:border-neon-purple/50 min-w-0";
+          wrap.style.animationDelay = `${idxSk * 40}ms`;
           wrap.innerHTML = `
-            ${badge}
-            <h4 class=\"font-semibold text-[17px] sm:text-[21px] text-center leading-snug\">${escapeHTML(sk.name)}</h4>
-            <div class=\"particle-line neon-border-soft !mt-13 h-[9px] w-full bg-[rgba(255,255,255,0.04)] neon-border-strong rounded-xl overflow-hidden\">
-              <div class=\"skills-bar-particle h-[9px] bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan neon-border-strong rounded-xl\" style=\"width: ${sk.level}%\"></div>
+            <div class="skill-card-icon mb-5 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-xl border border-white/15 bg-white/[0.04]">
+              <i class="${escapeHTML(sk.icon)} text-2xl sm:text-3xl text-transparent bg-gradient-to-br from-[#a855f7] to-[#06b6d4] bg-clip-text"></i>
             </div>
-            <p class=\"text-[17px] text-slate-300 tracking-wide\"><span>${sk.level}</span><span>%</span></p>
+            <h4 class="font-semibold text-base sm:text-lg text-center leading-snug">${escapeHTML(sk.name)}</h4>
+            <div class="mt-4 h-2 w-full rounded-full bg-white/[0.06] overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan" style="width: ${sk.level}%"></div>
+            </div>
+            <p class="mt-2 text-sm text-slate-400 tabular-nums">${sk.level}%</p>
           `;
           grid.appendChild(wrap);
-
-          wrap.querySelector("i:first-of-type").classList.add(
-            "text-transparent",
-            "bg-gradient-to-br",
-            "from-[#a855f7]",
-            "to-[#06b6d4]",
-          );
-          wrap.querySelector("i:first-of-type").style.webkitBackgroundClip = "text";
-          wrap.querySelector("i:first-of-type").style.backgroundClip = "text";
         });
 
         if (useRichEffects() && typeof VanillaTilt !== "undefined") {
-          grid.querySelectorAll(".tilt-card").forEach((el) => {
+          grid.querySelectorAll(".skill-card").forEach((el) => {
             if (el.vanillaTilt) el.vanillaTilt.destroy();
           });
-          VanillaTilt.init(grid.querySelectorAll(".tilt-card"), {
-            glare: true,
-            scale: "1.04",
+          VanillaTilt.init(grid.querySelectorAll(".skill-card"), {
+            glare: false,
+            scale: 1.02,
             gyroscope: false,
-            max: 27,
-          });
-        }
-
-        if (aosSkills) {
-          requestAnimationFrame(() => {
-            if (typeof AOS !== "undefined") AOS.refresh();
+            max: 12,
           });
         }
       };
 
       const firstSlug = catsMap(categories[0]).replace(/\s+/g, "").toLowerCase();
 
-      tabs.querySelectorAll("[data-skilltab]").forEach((btn) => {
-        btn.onclick = () => {
-          tabs.querySelectorAll("[data-skilltab]").forEach((b) => {
-            b.classList.remove(
-              "neo-tab-active",
-              "bg-[linear-gradient(110deg,#a855f766,#06b6d455)]",
-              "!bg-[linear-gradient(117deg,#a855f799,#ec489964,#06b6d433)]",
-              "scale-[1.08]",
-              "font-bold",
-              "text-white",
-              "neon-border-strong",
-            );
-            b.classList.add("opacity-[0.71]", "scale-[0.99]", "hover:brightness-115");
-          });
-          btn.classList.add(
-            "neo-tab-active",
-            "!bg-[linear-gradient(117deg,#a855f799,#ec489964,#06b6d433)]",
-            "scale-[1.08]",
-            "font-bold",
-            "text-white",
-            "neon-border-strong",
-          );
-          btn.classList.remove("opacity-[0.71]", "scale-[0.99]", "opacity-71");
-          paintSkills(btn.getAttribute("data-skilltab"));
-        };
+      tabs.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-skilltab]");
+        if (!btn || !tabs.contains(btn)) return;
+        setActiveTab(btn);
+        grid.classList.add("skill-grid-swapping");
+        paintSkills(btn.getAttribute("data-skilltab"));
+        requestAnimationFrame(() => grid.classList.remove("skill-grid-swapping"));
       });
 
       const firstBtn = tabs.querySelector("[data-skilltab]");
       if (firstBtn) {
-        firstBtn.classList.add(
-          "!bg-[linear-gradient(117deg,#a855f755,#06b6d433)]",
-          "neo-tab-active",
-        );
+        setActiveTab(firstBtn);
         paintSkills(firstSlug);
       }
     }
@@ -1278,9 +1224,19 @@
     }
 
     /** Alpine-root bootstrap */
-    window.initApp = function initApp() {
+    window.initApp = async function initApp() {
       if (window.__portfolioInitialized) return;
       window.__portfolioInitialized = true;
+
+      if (useLiteExperience()) {
+        document.documentElement.classList.add("portfolio-lite");
+      } else {
+        try {
+          await loadRichVendors();
+        } catch (_err) {
+          document.documentElement.classList.add("portfolio-lite");
+        }
+      }
 
       injectPersonal();
 
@@ -1296,27 +1252,26 @@
 
       if (useLiteExperience()) {
         stripAosAttributes();
-        document.documentElement.classList.add("portfolio-lite");
       } else if (typeof AOS !== "undefined") {
         AOS.init({
           easing: "ease-out-cubic",
           once: true,
-          duration: 600,
-          offset: 48,
+          duration: 500,
+          offset: 40,
           delay: 0,
           disableMutationObserver: true,
         });
       }
 
-      runWhenIdle(() => {
-        initParticlesHero();
-        initHeroGsap();
-        initStatsTilt();
-      });
-
-
+      if (useRichEffects()) {
+        runWhenIdle(() => {
+          initParticlesHero();
+          initHeroGsap();
+          initStatsTilt();
+        });
+      }
     };
 
     document.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => window.initApp(), 0);
+      void window.initApp();
     });
