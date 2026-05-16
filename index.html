@@ -20,8 +20,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="Abdul Hannan — Backend Developer. Node.js, Laravel, REST APIs. Open for freelance worldwide." />
-  <title>Abdul Hannan | Backend Developer · Portfolio Template</title>
+  <meta name="description" content="Abdul Hannan — Backend Developer specializing in Node.js, Laravel, and REST APIs. Logistics &amp; business systems. Open to freelance worldwide." />
+  <meta name="author" content="Abdul Hannan" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#030712" />
+  <title>Abdul Hannan | Backend Developer</title>
+
+  <link rel="canonical" href="https://portfolio-fawn-omega-69.vercel.app/" />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/og-cover.png" />
+
+  <!-- Open Graph / LinkedIn Featured preview (must be static — crawlers do not run JS) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Abdul Hannan" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://portfolio-fawn-omega-69.vercel.app/" />
+  <meta property="og:title" content="Abdul Hannan | Backend Developer" />
+  <meta property="og:description" content="Node.js &amp; Laravel engineer — REST APIs, logistics systems, dashboards. 5+ projects. Open to freelance &amp; remote work." />
+  <meta property="og:image" content="https://portfolio-fawn-omega-69.vercel.app/assets/og-cover.png" />
+  <meta property="og:image:secure_url" content="https://portfolio-fawn-omega-69.vercel.app/assets/og-cover.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Abdul Hannan — Backend Developer portfolio" />
+
+  <!-- Twitter / X card (also used by some link unfurlers) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Abdul Hannan | Backend Developer" />
+  <meta name="twitter:description" content="Node.js &amp; Laravel engineer — REST APIs, logistics systems. Open to freelance." />
+  <meta name="twitter:image" content="https://portfolio-fawn-omega-69.vercel.app/assets/og-cover.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Abdul Hannan",
+    "url": "https://portfolio-fawn-omega-69.vercel.app/",
+    "jobTitle": "Backend Developer",
+    "description": "Node.js and Laravel developer building REST APIs and logistics systems. Open to freelance.",
+    "email": "contact.hannan100@gmail.com",
+    "sameAs": [
+      "https://linkedin.com/in/abdul-hannan-choudhary-866a493bb",
+      "https://github.com/abdul-hannan-SE"
+    ],
+    "knowsAbout": ["Node.js", "Laravel", "REST APIs", "MongoDB", "MySQL", "AWS"],
+    "worksFor": { "@type": "Organization", "name": "Freelance / Open to work" }
+  }
+  </script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -294,7 +338,7 @@
         <button
           type="button"
           id="screenshotLightboxPrev"
-          class="absolute left-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-white/15 md:left-6 md:h-14 md:w-14"
+          class="screenshot-lightbox-nav absolute left-2 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white active:bg-white/20 md:left-6 md:h-14 md:w-14 touch-manipulation"
           aria-label="Previous screenshot"
         >
           <i class="fa-solid fa-chevron-left text-lg md:text-xl"></i>
@@ -302,7 +346,7 @@
         <button
           type="button"
           id="screenshotLightboxNext"
-          class="absolute right-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-white/15 md:right-6 md:h-14 md:w-14"
+          class="screenshot-lightbox-nav absolute right-2 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white active:bg-white/20 md:right-6 md:h-14 md:w-14 touch-manipulation"
           aria-label="Next screenshot"
         >
           <i class="fa-solid fa-chevron-right text-lg md:text-xl"></i>
@@ -312,7 +356,7 @@
             id="screenshotLightboxImg"
             src=""
             alt=""
-            class="max-h-[min(78vh,1040px)] w-auto max-w-full cursor-default rounded-lg object-contain shadow-2xl ring-1 ring-white/15 select-none"
+            class="screenshot-lightbox-img max-h-[min(78vh,1040px)] w-auto max-w-full cursor-default rounded-lg object-contain shadow-2xl ring-1 ring-white/15 select-none touch-manipulation"
             draggable="false"
           />
           <p id="screenshotLightboxCounter" class="min-h-[1.25rem] text-center text-[13px] font-medium tabular-nums text-slate-200"></p>
@@ -426,7 +470,7 @@
       </span>
       <small class="text-center block px-4 pb-8 text-[11px] sm:text-[12px] text-slate-500 leading-relaxed">
         © <span id="footerYear"></span> — All Rights Reserved.<br />
-        Portfolio · Template-ready · JS-configured
+        Backend Developer · Node.js · Laravel · Open to opportunities
       </small>
     </footer>
     <div class="h-24"></div>

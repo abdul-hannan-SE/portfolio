@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portfolio-fawn-omega-69.vercel.app/sitemap.xml

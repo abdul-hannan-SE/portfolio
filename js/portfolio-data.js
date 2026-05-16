@@ -2,6 +2,14 @@
  *  SINGLE SOURCE OF TRUTH — Edit this object only to update site content.
  *  ═══════════════════════════════════════════════════════════════════════════ */
 const portfolioData = {
+  /** Public site URL (Vercel) — used for LinkedIn Featured, Open Graph, canonical link */
+  site: {
+    url: "https://portfolio-fawn-omega-69.vercel.app/",
+    ogImage: "/assets/og-cover.png",
+    ogImageAlt: "Abdul Hannan — Backend Developer portfolio",
+    locale: "en_US",
+  },
+
   personal: {
     name: "Abdul Hannan",
     title: "Backend Developer",

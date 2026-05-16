@@ -32,6 +32,11 @@
       return prefersReducedMotion() || prefersSaveData() || !useRichEffects();
     }
 
+    /** Phones & tablets — mobile-only UX must not affect desktop rich mode */
+    function isMobileViewport() {
+      return window.matchMedia("(max-width: 1023px)").matches;
+    }
+
     function loadScriptOnce(src) {
       return new Promise((resolve, reject) => {
         if (document.querySelector(`script[src="${src}"]`)) {
@@ -89,15 +94,38 @@
       const brandSpans = document.querySelectorAll('[x-text*="Abdul"]');
       /** NOTE: alpine x-text binds at runtime */
 
-      /** Title & meta SEO */
-      const titleTxt = `${p.name} · ${p.title}`;
-      document.title = titleTxt;
-      /** SEO description */
-      const metaDesc =
-        document.querySelector('meta[name="description"]') ||
-        Object.assign(document.createElement("meta"), { name: "description" });
-      metaDesc.setAttribute("content", `${p.title} — ${p.subtitle}`);
-      if (!metaDesc.parentNode) document.head.appendChild(metaDesc);
+      /** Title & meta SEO / social (in-page sync; LinkedIn reads static tags in index.html) */
+      const site = portfolioData.site || {};
+      const siteUrl = (site.url || window.location.origin + "/").replace(/\/?$/, "/");
+      const ogImagePath = site.ogImage || "/assets/og-cover.png";
+      const ogImageAbs = ogImagePath.startsWith("http") ? ogImagePath : siteUrl.replace(/\/$/, "") + ogImagePath;
+      const shareDesc = `${p.title} — ${p.subtitle}`;
+
+      document.title = `${p.name} | ${p.title}`;
+
+      const setMeta = (attr, key, value) => {
+        if (!value) return;
+        let el = document.querySelector(`meta[${attr}="${key}"]`);
+        if (!el) {
+          el = document.createElement("meta");
+          el.setAttribute(attr, key);
+          document.head.appendChild(el);
+        }
+        el.setAttribute("content", value);
+      };
+
+      setMeta("name", "description", shareDesc);
+      setMeta("property", "og:title", `${p.name} | ${p.title}`);
+      setMeta("property", "og:description", shareDesc);
+      setMeta("property", "og:url", siteUrl);
+      setMeta("property", "og:image", ogImageAbs);
+      setMeta("property", "og:image:secure_url", ogImageAbs);
+      setMeta("name", "twitter:title", `${p.name} | ${p.title}`);
+      setMeta("name", "twitter:description", shareDesc);
+      setMeta("name", "twitter:image", ogImageAbs);
+
+      const canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.setAttribute("href", siteUrl);
 
       /** Nav brand labels */
       const navName = document.getElementById("navBrandName");
@@ -121,7 +149,7 @@
         "Submit opens your default mail app with a pre-filled draft. No APIs or secrets in the page — recipient is portfolioData.personal.email. Very long messages may hit browser mailto limits.";
 
       /** Footer Built */
-      document.getElementById("footerBuiltCopy").textContent = `Built using this template • ${p.name}`;
+      document.getElementById("footerBuiltCopy").textContent = `${p.name} · Backend Developer Portfolio`;
       /** Year */
       const ySpan = document.getElementById("footerYear");
       if (ySpan) ySpan.textContent = "" + new Date().getFullYear();
@@ -372,8 +400,13 @@
               <img src="${escapeHTML(portfolioAssetUrl(pj.image))}" alt="${escapeHTML(pj.imageAlt)}"
                    class="h-full w-full object-cover transition duration-[1.1s] ease-out group-hover:scale-[1.05]"
                    loading="lazy" decoding="async" draggable="false" />
-              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 transition duration-[0.52s] group-hover:opacity-100"></div>
-              <div class="pointer-events-none absolute inset-x-4 bottom-4 flex opacity-0 transition duration-[0.55s] group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 translate-y-3">
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 transition duration-[0.52s] group-hover:opacity-100 max-md:opacity-60"></div>
+              <button type="button" data-modal-open="${pj.id}"
+                class="absolute inset-x-0 bottom-0 z-10 flex md:hidden items-center justify-center gap-2 bg-gradient-to-t from-black/85 via-black/40 to-transparent pt-10 pb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white touch-manipulation">
+                <i class="fa-solid fa-up-right-and-down-left-from-center text-sm opacity-90" aria-hidden="true"></i>
+                View project
+              </button>
+              <div class="pointer-events-none absolute inset-x-4 bottom-4 hidden md:flex opacity-0 transition duration-[0.55s] group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 translate-y-3">
                 <button type="button" data-modal-open="${pj.id}"
                   class="neon-border pointer-events-auto flex flex-1 items-center justify-center rounded-2xl glass-strong px-6 py-[12px] font-display text-xs font-semibold uppercase tracking-[0.19em] text-white hover:bg-white/10">
                   View Details
@@ -461,12 +494,18 @@
     function renderProjectGalleryHtml(pj) {
       const items = pj.gallery;
       if (!Array.isArray(items) || !items.length) return "";
+      const mobile = isMobileViewport();
       const cells = items
         .map((g, i) => {
           const src = typeof g === "string" ? g : g.src;
           const alt = `${pj.title} — screenshot ${i + 1}`;
-          return `<figure class="overflow-hidden rounded-xl neon-border bg-slate-900/40">
-            <img src="${escapeHTML(portfolioAssetUrl(src))}" alt="${escapeHTML(alt)}" title="Open carousel" class="w-full max-h-[min(320px,42vh)] cursor-pointer object-cover object-top transition hover:opacity-95" loading="lazy" draggable="false" />
+          const thumbClass = mobile
+            ? "modal-gallery-img w-full max-h-[min(520px,58vh)] cursor-pointer object-cover object-top transition active:opacity-90 touch-manipulation"
+            : "modal-gallery-img w-full max-h-[min(320px,42vh)] cursor-pointer object-cover object-top transition hover:opacity-95";
+          return `<figure class="modal-gallery-figure relative overflow-hidden rounded-xl neon-border bg-slate-900/40">
+            <img src="${escapeHTML(portfolioAssetUrl(src))}" alt="${escapeHTML(alt)}" title="Tap to view full size"
+              class="${thumbClass}" loading="lazy" draggable="false" />
+            ${mobile ? `<span class="pointer-events-none absolute bottom-2 right-2 rounded-full bg-black/65 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/95">Tap to enlarge</span>` : ""}
           </figure>`;
         })
         .join("");
@@ -477,9 +516,17 @@
       return `<div class="mt-8">
         <h4 class="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-neon-purple/90">Screenshots</h4>
         ${overview}
-        <p class="mb-4 text-[11px] leading-snug text-slate-500">Click any image for full size and slide through the gallery (arrows or swipe).</p>
+        <p class="mb-4 text-[11px] leading-snug text-slate-500">${mobile ? "Tap any screenshot to open full screen · swipe to browse" : "Click any image for full size and slide through the gallery (arrows or swipe)."}</p>
         <div class="grid max-h-[min(62vh,720px)] gap-4 overflow-y-auto pr-1 sm:grid-cols-2">${cells}</div>
       </div>`;
+    }
+
+    function markModalImagesForLightbox() {
+      const content = document.getElementById("modalContent");
+      if (!content) return;
+      content.querySelectorAll("img").forEach((img) => {
+        img.classList.add("modal-gallery-img", "touch-manipulation");
+      });
     }
 
     function openProjectModal(id) {
@@ -502,13 +549,24 @@
            </div>`
         : "";
 
+      const mobile = isMobileViewport();
+      const heroImgBlock = mobile
+        ? `<div class="relative overflow-hidden rounded-2xl neon-border bg-slate-900/55">
+          <img src="${escapeHTML(portfolioAssetUrl(pj.image))}" alt="${escapeHTML(pj.imageAlt)}" title="Tap to view full size"
+               class="modal-gallery-img aspect-video w-full cursor-pointer object-cover touch-manipulation active:opacity-95" draggable="false" />
+          <button type="button" class="modal-open-lightbox-btn absolute bottom-3 right-3 z-[2] flex items-center gap-2 rounded-full bg-black/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-white touch-manipulation">
+            <i class="fa-solid fa-expand text-sm" aria-hidden="true"></i> Full screen
+          </button>
+        </div>`
+        : `<div class="overflow-hidden rounded-2xl neon-border bg-slate-900/55">
+          <img src="${escapeHTML(portfolioAssetUrl(pj.image))}" alt="${escapeHTML(pj.imageAlt)}" title="Open carousel"
+               class="modal-gallery-img aspect-video w-full cursor-pointer object-cover transition hover:opacity-95" draggable="false" />
+        </div>`;
+
       content.innerHTML = `
         <h3 id="modalTitleRef" class="font-display pr-14 text-2xl font-bold leading-tight">${escapeHTML(pj.title)}</h3>
         ${demoVideoBlock}
-        <div class="overflow-hidden rounded-2xl neon-border bg-slate-900/55">
-          <img src="${escapeHTML(portfolioAssetUrl(pj.image))}" alt="${escapeHTML(pj.imageAlt)}" title="Open carousel"
-               class="aspect-video w-full cursor-pointer object-cover transition hover:opacity-95" draggable="false" />
-        </div>
+        ${heroImgBlock}
         <p class="leading-relaxed text-slate-300">${escapeHTML(pj.longDescription || pj.description)}</p>
         <div>
           <h4 class="mb-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-neon-purple/90">Highlights</h4>
@@ -549,6 +607,21 @@
       pane.classList.add("translate-x-0", "translate-y-0", "scale-100", "opacity-100");
       backdrop.setAttribute("aria-hidden", "false");
       pane.setAttribute("aria-hidden", "false");
+
+      markModalImagesForLightbox();
+
+      if (mobile) {
+        pane.classList.add("project-modal-mobile-open");
+        content.querySelector(".modal-open-lightbox-btn")?.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const hero = content.querySelector(".modal-gallery-img");
+          const src = hero && (hero.currentSrc || hero.src);
+          if (src) screenshotLightboxOpenAtSlide(src);
+        });
+      } else {
+        pane.classList.remove("project-modal-mobile-open");
+      }
     }
 
     function closeProjectModal() {
@@ -567,6 +640,7 @@
         "scale-[0.965]",
         "opacity-95",
       );
+      pane.classList.remove("project-modal-mobile-open");
       backdrop.setAttribute("aria-hidden", "true");
       pane.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
@@ -939,22 +1013,20 @@
       img.alt = cur.alt;
       if (counter) counter.textContent = items.length > 1 ? `${idx + 1} / ${items.length}` : "";
       const multi = items.length > 1;
-      if (prev) {
-        prev.classList.toggle("hidden", !multi);
-        prev.classList.toggle("flex", multi);
-      }
-      if (next) {
-        next.classList.toggle("hidden", !multi);
-        next.classList.toggle("flex", multi);
-      }
+      [prev, next].forEach((btn) => {
+        if (!btn) return;
+        btn.classList.toggle("opacity-30", !multi);
+        btn.classList.toggle("pointer-events-none", !multi);
+      });
     }
 
     function screenshotLightboxShow() {
       const lb = document.getElementById("screenshotLightbox");
       if (!lb) return;
       lb.classList.remove("opacity-0", "pointer-events-none");
-      lb.classList.add("opacity-100", "pointer-events-auto");
+      lb.classList.add("opacity-100", "pointer-events-auto", "screenshot-lightbox-active");
       lb.setAttribute("aria-hidden", "false");
+      document.body.classList.add("screenshot-lightbox-open");
     }
 
     function screenshotLightboxOpenAtSlide(clickedSrc) {
@@ -982,7 +1054,7 @@
       const img = document.getElementById("screenshotLightboxImg");
       const counter = document.getElementById("screenshotLightboxCounter");
       if (!lb) return;
-      lb.classList.remove("opacity-100", "pointer-events-auto");
+      lb.classList.remove("opacity-100", "pointer-events-auto", "screenshot-lightbox-active");
       lb.classList.add("opacity-0", "pointer-events-none");
       lb.setAttribute("aria-hidden", "true");
       window.__portfolioLightboxItems = [];
@@ -992,6 +1064,17 @@
         img.alt = "";
       }
       if (counter) counter.textContent = "";
+      document.body.classList.remove("screenshot-lightbox-open");
+      const bd = document.getElementById("projectModalBackdrop");
+      if (!bd || !bd.classList.contains("pointer-events-auto")) {
+        document.body.style.overflow = "";
+      }
+    }
+
+    function openLightboxFromModalImage(img) {
+      if (!img) return;
+      const src = img.currentSrc || img.src;
+      if (src) screenshotLightboxOpenAtSlide(src);
     }
 
     function bindScreenshotLightbox() {
@@ -1064,6 +1147,7 @@
         };
 
         modalContent.addEventListener("pointerdown", (e) => {
+          if (isMobileViewport()) return;
           if (!projectModalIsOpen()) {
             tap = null;
             return;
@@ -1074,6 +1158,7 @@
         });
 
         modalContent.addEventListener("pointerup", (e) => {
+          if (isMobileViewport()) return;
           if (!tap || e.pointerId !== tap.id) return;
           if (!projectModalIsOpen()) {
             tap = null;
@@ -1096,6 +1181,19 @@
         modalContent.addEventListener("pointercancel", () => {
           tap = null;
         });
+
+        modalContent.addEventListener(
+          "click",
+          (e) => {
+            if (!isMobileViewport()) return;
+            const img = e.target.closest("img.modal-gallery-img");
+            if (!img || !projectModalIsOpen()) return;
+            e.preventDefault();
+            e.stopPropagation();
+            openLightboxFromModalImage(img);
+          },
+          true,
+        );
       }
 
       document.addEventListener("click", (e) => {
@@ -1203,6 +1301,55 @@
       });
     }
 
+    function initMobileScrollReveal() {
+      if (!isMobileViewport() || prefersReducedMotion()) {
+        stripAosAttributes();
+        return;
+      }
+
+      document.documentElement.classList.add("portfolio-mobile");
+
+      const els = document.querySelectorAll("[data-aos]");
+      els.forEach((el) => {
+        el.classList.add("mobile-reveal");
+        const delay = el.getAttribute("data-aos-delay");
+        if (delay && !Number.isNaN(Number(delay))) {
+          el.style.setProperty("--mobile-reveal-delay", `${Math.min(Number(delay), 350)}ms`);
+        }
+        el.removeAttribute("data-aos");
+        el.removeAttribute("data-aos-delay");
+        el.removeAttribute("data-aos-duration");
+        el.removeAttribute("data-aos-offset");
+        el.removeAttribute("data-aos-once");
+      });
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            e.target.classList.add("mobile-reveal--in");
+            io.unobserve(e.target);
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
+      );
+
+      document.querySelectorAll(".mobile-reveal").forEach((el) => io.observe(el));
+
+      document.querySelectorAll("#home .mobile-reveal").forEach((el) => {
+        requestAnimationFrame(() => el.classList.add("mobile-reveal--in"));
+      });
+    }
+
+    function configureLiteMotion() {
+      if (useRichEffects()) return;
+      if (isMobileViewport()) {
+        initMobileScrollReveal();
+      } else {
+        stripAosAttributes();
+      }
+    }
+
     function initHeroGsap() {
       if (!useRichEffects() || typeof gsap === "undefined") return;
       const hero = document.getElementById("home");
@@ -1250,9 +1397,9 @@
       initActiveNavSections();
       observeStatsCounters();
 
-      if (useLiteExperience()) {
-        stripAosAttributes();
-      } else if (typeof AOS !== "undefined") {
+      configureLiteMotion();
+
+      if (!useLiteExperience() && typeof AOS !== "undefined") {
         AOS.init({
           easing: "ease-out-cubic",
           once: true,
