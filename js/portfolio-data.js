@@ -6,29 +6,29 @@ const portfolioData = {
   site: {
     url: "https://portfolio-fawn-omega-69.vercel.app/",
     ogImage: "/assets/og-cover.png",
-    ogImageAlt: "Abdul Hannan — Backend Developer portfolio",
+    ogImageAlt: "Abdul Hannan — Full Stack Developer portfolio",
     locale: "en_US",
   },
 
   personal: {
     name: "Abdul Hannan",
-    title: "Backend Developer",
+    title: "Full Stack Developer",
     subtitle:
-      "Node.js Engineer | Laravel Developer | REST API Specialist | Open to Freelance",
+      "Node.js · Laravel · React & Next.js · REST APIs · Open to Freelance",
     email: "contact.hannan100@gmail.com",
     whatsapp: "+92 320 0071746",
     linkedin: "https://linkedin.com/in/abdul-hannan-choudhary-866a493bb",
     github: "https://github.com/abdul-hannan-SE",
     location: "Pakistan 🌍",
-    bio: "I'm a Software Engineering graduate with hands-on experience building backend systems for real-world logistics and business operations. Over the past year, I worked remotely with a Japanese forwarding company developing services that handle complex shipment workflows — integrating third-party APIs, optimizing database queries, and managing infrastructure across AWS, cPanel, and Zoho servers.",
+    bio: "I'm a Software Engineering graduate and full stack developer with hands-on experience shipping end-to-end products for logistics and business operations — APIs, admin dashboards, and customer-facing UIs. Over the past year I worked remotely with a Japanese forwarding company on services that handle complex shipment workflows: third-party integrations, database optimization, and deployments across AWS, cPanel, and Zoho servers.",
     companyName: "",
   },
 
   typedTexts: [
-    "Backend Developer",
+    "Full Stack Developer",
     "Node.js Engineer",
     "Laravel Developer",
-    "REST API Specialist",
+    "React & Next.js",
     "Open to Freelance Work",
   ],
 
@@ -253,7 +253,7 @@ const portfolioData = {
       endDate: "February 2026",
       duration: "1 Year",
       highlights: [
-        "Built and maintained backend services for logistics applications",
+        "Built and maintained full stack features for logistics applications (APIs, dashboards, integrations)",
         "Integrated third-party APIs extending application functionality",
         "Optimized database queries improving performance and reliability",
         "Managed AWS, cPanel, and Zoho server infrastructure",

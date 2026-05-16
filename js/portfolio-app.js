@@ -4,7 +4,7 @@
         hiLabel: "Hi, I'm",
         mobNavHidden: false,
         defaultName: "Abdul Hannan",
-        defaultSubtitle: "Backend Engineer",
+        defaultSubtitle: "Full Stack Developer",
       };
     }
     window.app = app;
@@ -149,7 +149,7 @@
         "Submit opens your default mail app with a pre-filled draft. No APIs or secrets in the page — recipient is portfolioData.personal.email. Very long messages may hit browser mailto limits.";
 
       /** Footer Built */
-      document.getElementById("footerBuiltCopy").textContent = `${p.name} · Backend Developer Portfolio`;
+      document.getElementById("footerBuiltCopy").textContent = `${p.name} · Full Stack Developer Portfolio`;
       /** Year */
       const ySpan = document.getElementById("footerYear");
       if (ySpan) ySpan.textContent = "" + new Date().getFullYear();
